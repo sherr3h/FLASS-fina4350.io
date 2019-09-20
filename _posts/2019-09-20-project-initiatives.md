@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Project Initiatives
-subtitle: Each post also has a subtitle
+subtitle: Texual Analysis on Youtube Gaming Video Comments
 gh-repo: sherr3h/sherr3h.github.io
 gh-badge: [star, fork, follow]
 tags: [test]
@@ -11,7 +11,7 @@ comments: true
 Check out the comment section of those Youtube gaming videos. What do they say about the giant gaming firms' upcoming financial performances?
 
 <a href="https://youtu.be/EeF3UTkCoxY" target="_blank"><img src="https://i.ytimg.com/vi/3SKv3r0NWvA/hqdefault.jpg" 
-alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" /></a>{: .center-block :}
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" />{: .center-block :}</a>
 
 See the dislike numbers of this video. Obviously the video game producer mistakenly thought their market, i.e. the gaming community, are still keen on futurist / irrealist games.
 
