@@ -4,7 +4,7 @@ title: Project Initiatives
 subtitle: Texual Analysis on Youtube Gaming Video Comments
 gh-repo: sherr3h/sherr3h.github.io
 gh-badge: [star, fork, follow]
-tags: [FINA4350, YouTube, comment, gaming]
+tags: [FINA4350, text analysis, YouTube, comment, gaming]
 comments: true
 ---
 
