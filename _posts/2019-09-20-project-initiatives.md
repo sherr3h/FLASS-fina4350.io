@@ -14,6 +14,6 @@ Check out the comment section of those Youtube gaming videos. What do they say a
 
 See the dislike numbers of this video. Obviously the video game producer mistakenly thought their market, i.e. the gaming community, were still keen on futurist / irrealist games.
 
-On the opposite side, one good example is Battlefield V.
+In contrast, one good example is Battlefield V.
 
 **Our initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements.**
