@@ -4,12 +4,7 @@ title: About me
 subtitle: Colorless green ideas sleep furiously in a sea of red
 ---
 
-I have the following qualities:
 
-- I rock a great mustache
-- I'm extremely loyal to my family
-
-What else do you need?
 
 ### my history
 
