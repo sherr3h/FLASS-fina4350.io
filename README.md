@@ -1,6 +1,6 @@
 # sherr3h.github.io
 
-This website is temporarily for FINA435O project group **FLASS!**.
+This website is temporarily used for FINA435O project group **FLASS!**.
 
 Created using beutiful-jekyll.
 
