@@ -9,6 +9,8 @@ comments: true
 ---
 by Florent IDARGO
 
+![try](/img/avatar-icon.png)
+
 ## Context ## 
 
 Hello!👋🏽<br />
