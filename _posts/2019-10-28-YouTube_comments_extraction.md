@@ -9,7 +9,7 @@ comments: true
 ---
 by Florent IDARGO
 
-![try](/img/avatar-icon.png)
+
 
 ## Context ## 
 
@@ -21,7 +21,7 @@ arbitrage opportunities on listed video games studios through their video games 
 
 ## Sample Determination 📚 ## 
 
- As we have the ambitious goal of predicting a stock price future trend, or at least develop a reliable indicator,
+As we have the ambitious goal of predicting a stock price future trend, or at least develop a reliable indicator,
 we needed first to get a training and a test sample. Video games studios are very diverse in their structure and 
 diversification. Even though they are listed, they have not intensively benchmarked each other’s management structures 
 and therefore maintain their strong, owns identities.<br />
@@ -58,6 +58,9 @@ its api service to each of its google accounts, without any delay. By this time 
 
 As we iterated through our game sample to collect their comments data, we faced a first issue, the downloading limit. 
 YouTube was only letting us download 10’000 comments per day, but most of our selected trailers had this amount of comments (note: the Youtube API only select the first comments, so it does not take into account the replies to a comment). Therefore, this would imply 25 days of data downloading, which is more than the time we have. As a compromise to this limit we have all decided to download every day the data from one game which allows us to get most of our YouTube data, going 5 time faster<br/>
+Here just under a sample of the output we had on NBA 2K19, the emojis handling will be treated in future posts.
+<br /><br />
+![try](/img/output_nba.png)
 
 ### Videos' Comments Heterogeneity ###
 
@@ -70,6 +73,10 @@ The second solution seemed better as we are not yet statisticians, we could bias
 As the adage says “garbage in -> garbage out” we need comparable games, if a game has too few comments it might be noise in our analysis.
 
 Thus, games having less than 5’000 comments won’t be in our analysis and will be replaced by more commented trailer from 2018 games.
+<br />
+<br />
+
+![try](/img/game_table.png)
 
 ## Coming work 📆 ##
 
@@ -79,4 +86,6 @@ to reach this work by the end of the week.
 We will relate the text pre-processing and exploratory data analysis in our next blogpost.
 
 Our last post will be about the mood learning and portfolio management.
+
+Stay in touch with us !
 
