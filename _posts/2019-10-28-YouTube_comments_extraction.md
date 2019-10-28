@@ -9,7 +9,7 @@ comments: true
 ---
 
 # Context #
----------------
+
 
 <p>
 Hello!👋🏽<br />
@@ -43,6 +43,7 @@ YouTube api.
 
 
 ## Youtube API potential 🧙🏼‍♂️ ## 
+---------------
 
 <p>
 Going for the YouTube api was our best choice. As we began to scroll through the official documentation it was 
