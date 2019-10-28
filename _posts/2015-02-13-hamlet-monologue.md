@@ -4,7 +4,7 @@ title: To be
 subtitle: ... or not to be?
 tags: [books, shakespeare, test]
 ---
-![try](\img\avatar-icon.png)
+![try](/img/avatar-icon.png)
 
 To be, or not to be--that is the question:
 Whether 'tis nobler in the mind to suffer
