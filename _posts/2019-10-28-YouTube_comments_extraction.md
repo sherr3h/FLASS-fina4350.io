@@ -1,12 +1,13 @@
 ---
 layout: post
-title: YouTube comments extraction???
+title: YouTube comments extraction
 subtitle: Sample determination and YouTube scraping
 gh-repo: sherr3h/sherr3h.github.io
 gh-badge: [star, fork, follow]
 tags: [FINA4350, text analysis, YouTube, comments, gaming]
 comments: true
 ---
+by Florent IDARGO
 
 ## Context ## 
 
@@ -77,4 +78,3 @@ We will relate the text pre-processing and exploratory data analysis in our next
 
 Our last post will be about the mood learning and portfolio management.
 
-Florent IDARGO
