@@ -7,7 +7,7 @@ gh-badge: [star, fork, follow]
 tags: [FINA4350, text analysis, YouTube, comments, gaming]
 comments: true
 ---
-## Context
+# Context #
 
 <p>
 Hello!👋🏽<br />
@@ -17,7 +17,7 @@ arbitrage opportunities on listed video games studios through their video games 
 <p/> 
 
 
-## Sample Determination 📚
+# Sample Determination 📚 # 
 <p>
  As we have the ambitious goal of predicting a stock price future trend, or at least develop a reliable indicator,
 we needed first to get a training and a test sample. Video games studios are very diverse in their structure and 
@@ -30,7 +30,7 @@ trailer publication period which might have biased the data. This made us elimin
 ranking game which fit our requirements.
 <p/>
 
-## Tool decision ♘
+# Tool decision ♘ # 
 
 <p>
  As 100% of our data come from YouTube, trying to scrape the Web site through libraries such as Scrapy would 
@@ -40,7 +40,7 @@ YouTube api.
 <p/>
 
 
-## Youtube API potential 🧙🏼‍♂️
+## Youtube API potential 🧙🏼‍♂️ ## 
 
 <p>
 Going for the YouTube api was our best choice. As we began to scroll through the official documentation it was 
@@ -52,14 +52,14 @@ its api service to each of its google accounts, without any delay. By this time 
 (documentation to learn and api key to implement) all that was left was to get the core job done: writing the software.
 <p/>
 
-## Software Development ⌨️
+## Software Development ⌨️ ##
 
-### Data download limit
+### Data download limit ### 
 
 <p>As we iterated through our game sample to collect their comments data, we faced a first issue, the downloading limit. 
 YouTube was only letting us download 10’000 comments per day, but most of our selected trailers had this amount of comments (note: the Youtube API only select the first comments, so it does not take into account the replies to a comment). Therefore, this would imply 25 days of data downloading, which is more than the time we have. As a compromise to this limit we have all decided to download every day the data from one game which allows us to get most of our YouTube data, going 5 time faster<br/>
 <p/>
-### Videos' Comments Heterogeneity
+### Videos' Comments Heterogeneity ###
 
 <p>
 Our next issue was the heterogeneous quantity of comments under each reveal trailers. Most games have around 10’000 comments, one 40’000
@@ -70,7 +70,7 @@ The second solution seemed better as we are not yet statisticians, we could bias
 As the adage says “garbage in -> garbage out” we need comparable games, if a game has too few comments it might be noise in our analysis.
 Thus, games having less than 5’000 comments won’t be in our analysis and will be replaced by more commented trailer from 2018 games.<p/>
 
-## Coming work 📆
+## Coming work 📆 ##
 
 <p>From our previous work we still need to complete our data with few more games compatible with our prerequisites... We expect
 to reach this work by the end of the week. <br />
