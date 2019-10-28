@@ -77,4 +77,4 @@ to reach this work by the end of the week. <br />
 We will relate the text pre-processing and exploratory data analysis in our next blogpost. <br />
 Our last post will be about the mood learning and portfolio management.
 <p/>
-<p><br />Florent IDARGO<p>
+<p><br />Florent IDARGO<p/>
