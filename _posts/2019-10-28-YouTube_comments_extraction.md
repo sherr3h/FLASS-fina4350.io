@@ -8,9 +8,7 @@ tags: [FINA4350, text analysis, YouTube, comments, gaming]
 comments: true
 ---
 
-# Context #
-
-
+## Context##
 <p>
 Hello!👋🏽<br />
 As one of the FLASS group member I will relate you our first achievements and our plans to monitor the next steps of 
@@ -18,8 +16,7 @@ our project. We already have defined our strategy at the blog creation but as a 
 arbitrage opportunities on listed video games studios through their video games trailers YouTube comments sentiments.
 <p/> 
 
-
-# Sample Determination 📚 # 
+## Sample Determination 📚##
 <p>
  As we have the ambitious goal of predicting a stock price future trend, or at least develop a reliable indicator,
 we needed first to get a training and a test sample. Video games studios are very diverse in their structure and 
