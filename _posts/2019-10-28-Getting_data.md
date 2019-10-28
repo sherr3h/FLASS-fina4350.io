@@ -7,6 +7,9 @@ gh-badge: [star, fork, follow]
 tags: [FINA4350, text analysis, YouTube, comments, gaming]
 comments: true
 ---
+
+![trytry](/img/avatar-icon.png)
+
 # Context
 
 <p>Hello!👋🏽<br />As one of the FLASS group member I will relate you our first achievements and our plans to monitor the next steps of 
