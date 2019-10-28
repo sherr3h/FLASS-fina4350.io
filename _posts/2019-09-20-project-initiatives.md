@@ -16,7 +16,10 @@ Yet the assumptions are often challenged, and that recent research suggests that
 
 <a href="https://youtu.be/EeF3UTkCoxY" target="_blank"><img src="https://i.ytimg.com/vi/3SKv3r0NWvA/hqdefault.jpg" alt="IMAGE ALT TEXT HERE" width="400" border="10" /></a>  << click to watch this trailer video
 
-A case in point is Battlefield V. See the dislike numbers of this video. Obviously the video game producer mistakenly thought their market, i.e. the gaming community, were still keen on futurist / irrealist games.
+A case in point is Call of Duty - Infinite Warfare. See the like/dislike ratio of the trailer video above. Apparently the video game producer mistakenly thought their market, i.e. the gaming community, were still keen on futurist / irrealist games.
 
+Could this sentiment be captured timely to generate alpha strategies?
 
-**Our initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements.**
+**Our initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements. Stay tuned!**
+
+by Sherry He
