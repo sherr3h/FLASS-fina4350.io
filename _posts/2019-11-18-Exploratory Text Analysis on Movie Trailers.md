@@ -9,10 +9,14 @@ comments: true
 ---
 by Sherry He
 
-Bello!👋🏽<br />
-This blog post is supplementary to our group project report and covers texual analysis of exploratory nature. Due to time limit, we were not able to incorporate such textual information into our supervised machine learning task to predict entertainment firms' financial performances.
+Bello!👋🏽<br /><br />
+This blog post is supplementary to our group project report and covers texual analysis of exploratory nature. 
 
-I will mainly show visualised results on bag-of-word models (word cloud) and topic models, using Youtube comment data under movie trailers. Bag-of-word models are generally used because of simplicity. Topic models are important in that, in current research literature, they're the most powerful tool to understand (i.e. extract information from) short texts such as reviews, Twitter or emails.
+I will mainly show visualised results on bag-of-word models (word cloud) and topic models, using Youtube comment data under movie trailers. 
+
+Bag-of-word models are generally used because of simplicity. 
+
+Topic models are important in that, in current research literature, they're the most powerful tool to understand (i.e. extract information from) short texts such as reviews, Twitter or emails.
 
 As mentioned in other posts, we focused on movies produced by the 8 studios as follows:
 * 21 Century Fox
@@ -29,6 +33,8 @@ Although the actual scientific merit of wordcloud is up for debate, I think scie
 
 ## Topic Modelling 📚 ## 
 
-### Data download limit ### 
+### A PLACEHOLDER ### 
 <br /><br />
 ![try](/img/output_nba.png)
+
+Due to time limit, we were not able to incorporate such textual information into our supervised machine learning task to predict entertainment firms' financial performances.
