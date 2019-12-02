@@ -26,7 +26,7 @@ As mentioned in other posts, we focused on movies produced by the 8 studios as f
 * Sony Pictures
 * Warner Bros
 
-##☁️ Word cloud ☁️## 
+## ☁️ Word cloud ☁️ ## 
 Although the actual scientific merit of wordcloud is up for debate, I think scientific communication is a crucial part in data science. And pretty images are the best tool to make a great first impression.
 
 ## 🗣️Topic Modelling 🗣️ ## 
