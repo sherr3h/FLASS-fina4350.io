@@ -10,9 +10,7 @@ comments: true
 by Sherry He
 
 Bello!👋🏽<br /><br />
-This blog post is supplementary to our group project report and covers texual analysis of exploratory nature. 
-
-I will mainly show visualised results on bag-of-word models (word cloud) and topic models, using Youtube comment data under movie trailers. 
+This blog post is supplementary to our group project report and covers texual analysis of exploratory nature. I will mainly show visualised results on bag-of-word models (word cloud) and topic models, using Youtube comment data under movie trailers. 
 
 Bag-of-word models are generally used because of simplicity. 
 
