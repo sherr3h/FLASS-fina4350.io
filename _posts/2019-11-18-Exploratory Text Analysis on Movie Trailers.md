@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Exploratory Text Analysis on Youtube Movie Trailer Comments
+title: Exploratory Text Analysis on Movie Trailers
 subtitle: Visualisation and Topic Modelling
 gh-repo: sherr3h/sherr3h.github.io
 gh-badge: [star, fork, follow]
@@ -29,6 +29,8 @@ As mentioned in other posts, we focused on movies produced by the 8 studios as f
 ## ☁️ Word cloud ☁️ ## 
 Although the actual scientific merit of wordcloud is up for debate, I think scientific communication is a crucial part in data science. And pretty images are the best tool to make a great first impression.
 
+In this part, [Gensim][gensim] package is used for the td-idf model, and [Andreas Mueller’s word cloud][wordcloud] package for visuals. Also  [NLTK][nltk] package is used to perform pre-processing. While other packages can do this too, I prefer to use a package specifically designed to perform these types of operations and allow rooms for customisation. 
+
 ## 🗣️Topic Modelling 🗣️ ## 
 
 ### A PLACEHOLDER ### 
@@ -36,3 +38,7 @@ Although the actual scientific merit of wordcloud is up for debate, I think scie
 ![try](/img/output_nba.png)
 
 Due to time limit, we were not able to incorporate such textual information into our supervised machine learning task to predict entertainment firms' financial performances.
+
+[wordcloud]: http://amueller.github.io/word_cloud/
+[gensim]: https://github.com/RaRe-Technologies/gensim
+[nltk]: https://github.com/nltk/nltk
