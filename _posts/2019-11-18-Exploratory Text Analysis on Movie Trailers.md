@@ -12,9 +12,9 @@ by Sherry He
 Bello!👋🏽<br /><br />
 This blog post is supplementary to our group project report and covers texual analysis of exploratory nature. I will mainly show visualised results on bag-of-word models (word cloud) and topic models, using Youtube comment data under movie trailers. 
 
-Bag-of-word models are generally used because of simplicity. 
+These two models are generally applied to understand (i.e.extract information from) short texts such as reviews, Twitter or emails, becuase the semantic structures of such texts are often very mixed-up.
 
-Topic models are important in that, in current research literature, they're the most powerful tool to understand (i.e. extract information from) short texts such as reviews, Twitter or emails.
+Bag-of-word models are used because of simplicity. Topic models are important in that they form interpretable representations over documents.
 
 As mentioned in other posts, we focused on movies produced by the 8 studios as follows:
 * 21 Century Fox
@@ -23,13 +23,13 @@ As mentioned in other posts, we focused on movies produced by the 8 studios as f
 * Marvel
 * Paramount 
 * Universal
-* Sony
+* Sony Pictures
 * Warner Bros
 
-## Word cloud ## 
+##☁️ Word cloud ☁️## 
 Although the actual scientific merit of wordcloud is up for debate, I think scientific communication is a crucial part in data science. And pretty images are the best tool to make a great first impression.
 
-## Topic Modelling 📚 ## 
+## 🗣️Topic Modelling 🗣️ ## 
 
 ### A PLACEHOLDER ### 
 <br /><br />
