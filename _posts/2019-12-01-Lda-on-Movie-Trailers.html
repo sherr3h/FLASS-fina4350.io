@@ -1,8 +1,19 @@
 <p>By Sherry He</p>
 
-<p>Bello!👋🏽</p>
+<p>Bello!👋</p>
 
-<p>This blog post is supplementary to our group project report and shows visualised results of LDA (Latent Dirichlet Allocation) on movie trailer comments.
+<p>This post is a supplementary to our group project report and covers LDA (Latent Dirichlet Allocation) method, and their results on movie trailer comments.
+</p>
+
+<p> Latent Dirichlet Allocation is a Bayesian topic model by Blei et al., 2003. It has better results compared to previous topic models such as LSI, pLSI, and is now the building block of many technological application, such as recommendation systems that uses reviews. Its basic idea is:
+  
+<ul>
+  <li>A <b>corpus</b> is a set of documents (all comments/reviews under a movie). It exhibits multiple topics</li>
+  <li>Each <b>document</b> is a mixture of topics</li>
+  <li>Each <b>word</b> is drawn from one of the topics </li>
+</ul>  
+<img src="img/LDA_illustrate_big.png" alt="lda" class="inline"/>
+
 </p>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/bmabey/pyLDAvis/files/ldavis.v1.0.0.css">
