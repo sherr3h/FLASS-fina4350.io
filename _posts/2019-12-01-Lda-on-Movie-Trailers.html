@@ -92,6 +92,51 @@ Another way of thinking it is, if you are a fan of highlighters, and you use dif
 
 <p>Nevertheless, I'm happy that we learnt about LDA and did some interesting texual analysis.🦄 </p>
 
+<p>Below is the minimal version of Python code to realise the LDA interactive results using Gensim and pyLDAvis (assuming text pre-processing is done):</p>
+```python
+# Gensim
+import gensim
+import gensim.corpora as corpora
+from gensim.utils import simple_preprocess
+from gensim.models import CoherenceModel
 
+# Plotting tools
+import pyLDAvis
+import pyLDAvis.gensim  # don't skip this
+import matplotlib.pyplot as plt
 
+# just an example of corpus
+all_studio_comment_list = [[ 'stop','laugh', 'begin'], 
+                ['disappoint','garbage','actors','especially','mark','funny','wonder','end','reject','netflix','pile'],
+                ['john','cena','description']]
+
+# Create Dictionary
+id2word = corpora.Dictionary(all_studio_comment_list)
+
+# Create Corpus
+texts = all_studio_comment_list
+
+# Term Document Frequency
+corpus = [id2word.doc2bow(text) for text in texts]
+
+# Build LDA model
+lda_model = gensim.models.ldamodel.LdaModel(corpus=all_studio_comment_list,
+                                           id2word=id2word,
+                                           num_topics=20,    # number of topics
+                                           random_state=100,
+                                           update_every=1,
+                                           chunksize=100,
+                                           passes=10,
+                                           alpha='auto',     # hyperparameter for Dirichlet distribution, default 1.0/num_topics 
+                                           per_word_topics=True)
+
+# Print the top 40 keywords in the 10 topics
+pprint(lda_model.print_topics(num_topics=10, num_words=40))
+
+# Visualize the topics
+pyLDAvis.enable_notebook()
+vis = pyLDAvis.gensim.prepare(lda_model, corpus, id2word) # this might take a while
+pyLDAvis.show(vis) # an html will show up, and done!
+
+```
 
