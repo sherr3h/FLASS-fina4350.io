@@ -93,6 +93,11 @@ Another way of thinking it is, if you are a fan of highlighters, and you use dif
 <p>Nevertheless, I'm happy that we learnt about LDA and did some interesting texual analysis.🦄 </p>
 
 <p>Below is the minimal version of Python code to realise the LDA interactive results using Gensim and pyLDAvis (assuming text pre-processing is done):</p>
+
+
+<pre>
+    <code>
+      
 ```python
 # Gensim
 import gensim
@@ -139,4 +144,7 @@ vis = pyLDAvis.gensim.prepare(lda_model, corpus, id2word) # this might take a wh
 pyLDAvis.show(vis) # an html will show up, and done!
 
 ```
+    </code>
+  </pre>
+
 
