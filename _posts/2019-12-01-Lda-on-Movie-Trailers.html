@@ -5,41 +5,7 @@
 <p>This post is a supplementary to our group project report. I'm going to talk about LDA (Latent Dirichlet Allocation) topic model and its results on movie trailer comments.
 </p>
 
-<p> Latent Dirichlet Allocation is a Bayesian topic model by Blei et al., 2003. It has better results compared to previous topic models such as LSI, pLSI, and is now the building block of many technological applications, such as short-text information extraction and recommendation systems based on reviews. Its basic idea is:
-  
-<ul>
-  <li>A <b>corpus</b> is a set of documents (all comments/reviews under a movie). It exhibits multiple topics</li>
-  <li>Each <b>document</b> is a mixture of topics</li>
-  <li>Each  <b> topic</b> is a (multinomial) distribution over words</li>
-  <li>Each <b>word</b> is drawn from one of the topics </li>
-</ul>  
-
-Another way of thinking it is, if you are a fan of highlighters, and you use different colors to highlight words in different topics, you will get a document like this:  
-</p>
-<p align="center">
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/LDA_illustrate_big.png?raw=true" alt="custom image"/>
-</p>
-
-<p>If you (ask a machine to) persistently highlight all words in a corpus, removing meaningless words, you will get two distributions: 
-  <ul>
-  <li>Proportion of each <b> topic</b> in the corpus </li>
-  <li><b>word</b> distribution within each topic </li>
-</ul>  
-  <p align="center">
-  <img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/item_topic_4.png?raw=true" alt="custom image2"/>
-  </p>
-  
-<p>And that's how the model "generates" probablistic word and topic distribution. The next step will be using Bayesian inference methods to estimate those distributions.</p>
-
-<p>Instead of going deeper into maths, let's move on to our empirical study! </p>
-
-<p>Because people have drastically different preferences on their entertainment, we think the movie production business is affected by behavioural finance. We selected top eight movie studios in the entertainment industry, including:
-  
-  20 Century Fox, Disney, Lions Gate, Marvel, Paramount Pictures, Sony Pictures, Universal Studio and Warner Bros. Using Youtube Data API (see our previous post!), we extracted all comments under 384 movie trailers.
-
-<p>After preprocessing, we used Python package Gensim to perform LDA topic modelling. Check out our interactive results below! </p>
-
-<p>We can see that topic 2 is about star war (franchised by Disney), topic 6 is about marvel heroes/black pather (I wonder where's wonder woman?), topic 3 is about love/drama films, and topic 5 is possibily dominated by dinasours?</p> 
+<p>But please play around with the interactive results first:</p>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/bmabey/pyLDAvis/files/ldavis.v1.0.0.css">
 
@@ -81,3 +47,40 @@ if(typeof(LDAvis) !== "undefined"){
          });
 }
 </script>
+
+<p> Latent Dirichlet Allocation is a Bayesian topic model by Blei et al., 2003. It has better results compared to previous topic models such as LSI, pLSI, and is now the building block of many technological applications, such as short-text information extraction and recommendation systems based on reviews. Its basic idea is:
+  
+<ul>
+  <li>A <b>corpus</b> is a set of documents (all comments/reviews under a movie). It exhibits multiple topics</li>
+  <li>Each <b>document</b> is a mixture of topics</li>
+  <li>Each  <b> topic</b> is a (multinomial) distribution over words</li>
+  <li>Each <b>word</b> is drawn from one of the topics </li>
+</ul>  
+
+Another way of thinking it is, if you are a fan of highlighters, and you use different colors to highlight words in different topics, you will get a document like this:  
+</p>
+<p align="center">
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/LDA_illustrate_big.png?raw=true" alt="custom image"/>
+</p>
+
+<p>If you (ask a machine to) persistently highlight all words in a corpus, removing meaningless words, you will get two distributions: 
+  <ul>
+  <li>Proportion of each <b> topic</b> in the corpus </li>
+  <li><b>word</b> distribution within each topic </li>
+</ul>  
+  <p align="center">
+  <img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/item_topic_4.png?raw=true" alt="custom image2"/>
+  </p>
+  
+<p>And that's how the model "generates" probablistic word and topic distribution. The next step will be using Bayesian inference methods to estimate those distributions.</p>
+
+<p>Instead of going deeper into maths, let's move on to our empirical study! </p>
+
+<p>Because people have drastically different preferences on their entertainment, we think the movie production business is affected by behavioural finance. We selected top eight movie studios in the entertainment industry, including:
+  
+  20 Century Fox, Disney, Lions Gate, Marvel, Paramount Pictures, Sony Pictures, Universal Studio and Warner Bros. Using Youtube Data API (see our previous post!), we extracted all comments under 384 movie trailers.
+
+<p>After preprocessing, we used Python package Gensim to perform LDA topic modelling. Check out our interactive results above! </p>
+
+<p>We can see that topic 2 is about star war (franchised by Disney), topic 6 is about marvel heroes/black pather, topic 3 is about love/drama films, and topic 5 is possibily dominated by dinasours?</p> 
+
