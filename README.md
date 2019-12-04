@@ -2,6 +2,6 @@
 
 This website is temporarily used for FINA435O project group **FLASS!**.
 
-Created using beutiful-jekyll.
+Created using Beautiful Jekyll.
 
 > *Copyright 2019 [Dean Attali](https://deanattali.com)*
