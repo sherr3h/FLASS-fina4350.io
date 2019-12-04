@@ -12,8 +12,23 @@
   <li>Each <b>document</b> is a mixture of topics</li>
   <li>Each <b>word</b> is drawn from one of the topics </li>
 </ul>  
+</p>
+
+<p align="center">
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/LDA_illustrate_big.png?raw=true" alt="custom image"/>
+</p>
 <img src="img/LDA_illustrate_big.png" alt="lda" class="inline"/>
 
+<p> Specifically, the Bayesian generative model is formulated as:
+<ul>
+ <li> A {\color{blue}corpus} has $K$ topics and $D$ documents.
+  \linebreak A {\color{blue}document} $d$ has a topic distribution $\theta_d = (\theta_{d1},...,\theta_{dK} )$.  
+  \linebreak A {\color{blue}topic} $k$ has a word distribution $\beta_k = (\beta_{k1}, \beta_{k2},...)$.
+  \item In document $d$, the $n^{th}$ {\color{blue}word} is from  $z_{nd}$ {\color{blue}topic}, $ z_{nd} | \theta_d \sim Multinominal(\theta _d)$, where $\theta_d | \alpha \sim Dirichlet(\alpha)$ .
+  \item In document $d$, the $n^{th}$ {\color{blue}word} $w_{nd} | \beta_{z_{nd}},z_{nd} \sim Multinominal(\beta _{z_{nd}} )$, where $\beta _k | \gamma \sim Dirichlet(\gamma)$
+</ul>  
+
+Eg., find $p (w_{nd} = "spiderman", topic\,z_{nd}= 1, \theta_{d1} | observed\,review\,d)$
 </p>
 
 <link rel="stylesheet" type="text/css" href="https://cdn.rawgit.com/bmabey/pyLDAvis/files/ldavis.v1.0.0.css">
