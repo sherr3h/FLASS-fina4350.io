@@ -23,17 +23,16 @@ A case in point is Battlefield V. See the like/dislike ratio of the trailer vide
 
 Our project initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements. 
 
-As a starter, I did some exploratory textual analysis. Here I'd like to share how to make a wordcloud. Some example word cloud of some games:
+As a starter, I did some exploratory textual analysis. Here I'd like to share how to make a wordcloud. Some example word cloud of some games:  
 
-<p>
 Battlefield V (unfortunately, with excessive negative reviews)  
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/battlefield%20V_wordcloud2.png" alt="BattleV" width="500" class="center"/> </p>  
-<p>
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/battlefield%20V_wordcloud2.png" alt="BattleV" width="500" class="center"/>   
+
 Call of Duty Infinite Warefare:   
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/cod_wordcloud_try1.jpg" alt="cod" width="500" class="center"/></p>  
-<p>
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/cod_wordcloud_try1.jpg" alt="cod" width="500" class="center"/>  
+
 Pokemon: Let's go, Pikachu!  
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/pokemon_wordcloud_try2.png" alt="Pikachu" width="500" class="center"/></p>
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/pokemon_wordcloud_try2.png" alt="Pikachu" width="500" class="center"/>  
 
 Here's the minimal version of python code to realise a wordcloud:
 ```python
