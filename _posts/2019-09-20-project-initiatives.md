@@ -23,10 +23,10 @@ A case in point is Battlefield V. See the like/dislike ratio of the trailer vide
 
 Our project initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements. 
 
-As a starter, I did some exploratory textual analysis. Here I'd like to share how to make a wordcloud. Some example word cloud of some games:  
+As a starter, I did some exploratory textual analysis. Here I'd like to share how to make a wordcloud. Below are example word clouds of some games. 
 
 Battlefield V (unfortunately, with excessive negative reviews):  
-![try](/img/battlefieldV_wordcloud2.png =300x)
+![](/img/battlefieldV_wordcloud2.png =300x)   
 
 Call of Duty Infinite Warefare:   
 <img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/cod_wordcloud_try1.jpg?raw=true" alt="cod" width="600" class="center"/>  
