@@ -21,7 +21,7 @@ The FLASS project has for attempt to give traders insight about market reaction 
 
 ### Structure YouTube and Bloomberg Data in one file to run sicket-learn machine learning models. 
 
-Thus we got the following sub-objectives:
+Thus we got the following sub-objectives:<br/>
 •	Getting the right comments for the corresponding timeframe<br />
 •	Building sentiment analysis measure on the corresponding comments<br />
 •	Joining both financial and text data output in one file<br />
