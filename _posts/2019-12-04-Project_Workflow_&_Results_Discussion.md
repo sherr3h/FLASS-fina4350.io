@@ -61,7 +61,8 @@ The model we chose are the Multilayer Perceptron Classifier, the K-nearest neigh
 For each of these models we needed to find the right combination of hyperparameter A and B in addition to the own models hyperparameters setting (i.e. layer structure setting, alpha, number of neighbor), this led to variable number of model testing. Whereas we tested 6’900 Ridge Regression models in total (69 combination of A&B were chose and for each we tested 100 values of alpha comprised in [0;1]), we had to do 69000 thousands test to achieve the same panel of analysis for MLP classifier (69 combinations of A&B and 1000 possible within (1,1,1) and (100,100,100)). As neuronal network is a highly time-consuming model to fit for sicket learn we decided to us KNN as a proxy, though it does absolutely not work in the same manner, as both models works with categorized output we expected to discern latent correlation in the data to thereafter  analyze deeper with neuronal network. This process saved us 42’000 model fitting.<br />
 
 # Final Workflow
-![try](/img/workflowFLASS.png)
+
+![try](/img/workflowFlass.png)
 <br/>
 Parser and Parser_Financial select the Data, Master join it in a common DataFrame and finally Ridge, knn and MLP models are runned in their respective files to test large combination set of hyperparameters.
 
