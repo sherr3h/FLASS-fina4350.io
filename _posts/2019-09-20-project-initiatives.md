@@ -19,20 +19,20 @@ Yet the assumptions are often challenged, and recent research suggests that news
 
 A case in point is Battlefield V. See the like/dislike ratio of the trailer video above. Apparently the video game producer (Electronic Art) mistakenly thought their market, i.e. the gaming community, were still keen on futurist / irrealist games. Although it's too early to say these were the only reason, EA stock price has indeed tumbled during the period:
 
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/EA.png" alt="EA" width="500" class="center"/>
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/EA.png?raw=true" alt="EA" width="500" class="center"/>
 
 Our project initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements. 
 
 As a starter, I did some exploratory textual analysis. Here I'd like to share how to make a wordcloud. Some example word cloud of some games:  
 
 Battlefield V (unfortunately, with excessive negative reviews)  
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/battlefield%20V_wordcloud2.png" alt="BattleV" width="500" class="center"/>   
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/battlefield%20V_wordcloud2.png?raw=true" alt="BattleV" width="500" class="center"/>   
 
 Call of Duty Infinite Warefare:   
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/cod_wordcloud_try1.jpg" alt="cod" width="500" class="center"/>  
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/cod_wordcloud_try1.jpg?raw=true" alt="cod" width="500" class="center"/>  
 
 Pokemon: Let's go, Pikachu!  
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/pokemon_wordcloud_try2.png" alt="Pikachu" width="500" class="center"/>  
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/pokemon_wordcloud_try2.png?raw=true" alt="Pikachu" width="500" class="center"/>  
 
 Here's the minimal version of python code to realise a wordcloud:
 ```python
