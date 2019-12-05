@@ -19,20 +19,20 @@ Yet the assumptions are often challenged, and recent research suggests that news
 
 A case in point is Battlefield V. See the like/dislike ratio of the trailer video above. Apparently the video game producer (Electronic Art) mistakenly thought their market, i.e. the gaming community, were still keen on futurist / irrealist games. Although it's too early to say these were the only reason, EA stock price has indeed tumbled during the period:
 
-<img src="/img/EA.png" alt="EA" width="300"/>
+<img src="/img/EA.png" alt="EA" width="500"/>
 
 Our project initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements. 
 
 As a starter, I did some exploratory textual analysis. Here I'd like to share how to make a wordcloud. Some example word cloud of some games:
 
-Battlefield V:
-<img src="/img/battlefield V_wordcloud2.png" alt="BattleV" width="300"/>
+Battlefield V: <br/>
+<img src="/img/battlefield V_wordcloud2.png" alt="BattleV" width="500"/>
 
-Call of Duty Infinite Warefare:
-<img src="/img/cod_wordcloud_try1.jpg" alt="cod" width="300"/>
+Call of Duty Infinite Warefare: <br/>
+<img src="/img/cod_wordcloud_try1.jpg" alt="cod" width="500"/>
 
-Pokemon: Let's go, Pikachu!
-<img src="/img/pokemon_wordcloud_try2.png" alt="Pikachu" width="300"/>
+Pokemon: Let's go, Pikachu! <br/>
+<img src="/img/pokemon_wordcloud_try2.png" alt="Pikachu" width="500"/>
 
 Here's the minimal version of python code to realise a wordcloud:
 ```python
