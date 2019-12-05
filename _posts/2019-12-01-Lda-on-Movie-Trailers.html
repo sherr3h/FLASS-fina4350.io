@@ -56,7 +56,7 @@ if(typeof(LDAvis) !== "undefined"){
          });
 }
 </script>
-
+<h3>How does LDA work? </h3>
 <p> Latent Dirichlet Allocation is a Bayesian topic model by Blei et al., 2003. It has better results compared to previous topic models such as LSI, pLSI, and is now the building block of many technological applications, such as short-text information extraction and recommendation systems based on reviews. Its basic idea is:
   
 <ul>
@@ -81,9 +81,11 @@ Another way of thinking it is, if you are a fan of highlighters, and you use dif
   <img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/item_topic_4.png?raw=true" alt="custom image2" width="400"/>
   </p>
   
-<p>And that's how the model "generates" probablistic word and topic distribution. The next step will be using Bayesian inference methods to estimate those distributions.</p>
+<p>And that's how the model "generates" probablistic word and topic distribution. In reality, the only observable structure is document. So the next step will be using Bayesian inference methods to estimate those distributions.</p>
 
 <p>Instead of going deeper into maths, let's move on to our empirical study! </p>
+
+<h3>LDA on Comments of Movie Trailers </h3>
 
 <p>Because people have drastically different preferences on their entertainment, we think the movie production business is affected by behavioural finance. We selected top eight movie studios in the entertainment industry, including:
   
