@@ -49,7 +49,7 @@ Once all studios have their movies’ comments interpreted with an assign polari
 The purpose is to structure each of the movies as an individual input for later machine learning processes. Thus, for each movie we assign from Parser.py csv output its average comments polarity, subjectivity and the standard deviation of both characteristics to see their homogeneity. <br />
 Data extracted from comments:<br />
 
-![try](/img/comments_output_tab.png)
+![try](/img/comment_output_tab.png)
 <br />
 
 As said before movies folder permit to retrieve their studio’s ticker and videos published time permit to select pertinent financial data. To help our model having financial context on each movies, we gave it the average volume and price variation over the 31 previous days as well as the standard deviation computed on the same time period. Finally, as we will run machine learning model, we need target columns, these will be called “Period_price_variation” and “Categorized_price_variation”.
