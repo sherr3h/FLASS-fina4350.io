@@ -1,7 +1,7 @@
 ---
 layout: post
-title: 
-subtitle: Sample determination and YouTube scraping
+title: Project workflow and Result Discussion
+subtitle: The detailed path into FLASS trade-offs
 gh-repo: sherr3h/sherr3h.github.io
 gh-badge: [star, fork, follow]
 tags: [FINA4350, text analysis, Machine Learning, comments, Hollywood]
