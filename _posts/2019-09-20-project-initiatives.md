@@ -25,14 +25,15 @@ Our project initiative is to use the comment section as an alternative data sour
 
 As a starter, I did some exploratory textual analysis. Here I'd like to share how to make a wordcloud. Some example word cloud of some games:
 
+<p>
 Battlefield V (unfortunately, with excessive negative reviews)
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/battlefield%20V_wordcloud2.png" alt="BattleV" width="500" class="center"/>
-
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/battlefield%20V_wordcloud2.png" alt="BattleV" width="500" class="center"/> </p>
+<p>
 Call of Duty Infinite Warefare: 
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/cod_wordcloud_try1.jpg" alt="cod" width="500" class="center"/>
-
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/cod_wordcloud_try1.jpg" alt="cod" width="500" class="center"/></p>
+<p>
 Pokemon: Let's go, Pikachu!
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/pokemon_wordcloud_try2.png" alt="Pikachu" width="500" class="center"/>
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/pokemon_wordcloud_try2.png" alt="Pikachu" width="500" class="center"/></p>
 
 Here's the minimal version of python code to realise a wordcloud:
 ```python
