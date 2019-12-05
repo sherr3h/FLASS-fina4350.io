@@ -28,7 +28,7 @@ Thus we got the following sub-objectives:<br/>
 •	Fitting the right machine learning models, trying to find the performant hyperparameters through large combination test.<br />
 
 And the following hyperparameters to optimize:
-	A: the comment selection period
+	A: the comment selection period<br />
 	B: the price variation prediction period<br />
 
 # Worklow Detailing
