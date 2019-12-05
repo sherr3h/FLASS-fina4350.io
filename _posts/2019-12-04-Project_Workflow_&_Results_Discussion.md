@@ -11,7 +11,7 @@ by Florent IDARGO
 
 Hello ! <br />
 
-This post is here to familiarize you with the structure of our data and its code usage, to have an easier readibility of it try to consult our github directory first: [title](https://github.com/sherr3h/Gaming-Text-Analysis/tree/master/working)  <br />
+This post is here to familiarize you with the structure of our data and its code usage, to have an easier readibility of it try to consult our [github directory](https://github.com/sherr3h/Gaming-Text-Analysis/tree/master/working).  <br />
 
 # Recap #
 
