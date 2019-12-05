@@ -7,6 +7,7 @@ gh-badge: [star, fork, follow]
 tags: [FINA4350, text analysis, YouTube, comment, gaming]
 comments: true
 ---
+by Sherry He
 
 Check out the comment section of those Youtube gaming videos. What do they say about the giant gaming firms' upcoming financial performances?
 
@@ -22,4 +23,4 @@ Could this sentiment be captured timely to generate alpha strategies?
 
 **Our initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements. Stay tuned!**
 
-by Sherry He
+
