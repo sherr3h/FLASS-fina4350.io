@@ -25,7 +25,7 @@ Our project initiative is to use the comment section as an alternative data sour
 
 As a starter, I did some exploratory textual analysis. Here I'd like to share how to make a wordcloud. Some example word cloud of some games:
 
-Battlefield V: <br/>
+Battlefield V:
 <img src="/img/battlefield V_wordcloud2.png" alt="BattleV" width="500"/>
 
 Call of Duty Infinite Warefare: 
