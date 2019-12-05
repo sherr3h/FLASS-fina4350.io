@@ -29,10 +29,10 @@ Battlefield V (which unfortunately received excessive negative reviews):
 <img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/battlefieldV_wordcloud2.png?raw=true" alt="BattleV" width="500"/> 
 
 Call of Duty Infinite Warefare:   
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/cod_wordcloud_try1.jpg?raw=true" alt="cod" width="600" class="center"/>  
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/cod_wordcloud_try1.jpg?raw=true" alt="cod" width="500" class="center"/>  
 
 Pokemon: Let's go, Pikachu!  
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/pokemon_wordcloud_try2.png?raw=true" alt="Pikachu" width="900" class="center"/>  
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/pokemon_wordcloud_try2.png?raw=true" alt="Pikachu" width="500" class="center"/>  
 
 Here's the minimal version of python code to realise a wordcloud:
 ```python
