@@ -1,10 +1,10 @@
 ---
 layout: post
 title: Project Initiatives
-subtitle: Texual Analysis on Youtube Gaming Video Comments
+subtitle: Our Observation, and Word Cloud, from Youtube Video Comments
 gh-repo: sherr3h/sherr3h.github.io
 gh-badge: [star, fork, follow]
-tags: [FINA4350, text analysis, YouTube, comment, gaming]
+tags: [FINA4350, text analysis, YouTube, comment, gaming, movie]
 comments: true
 ---
 by Sherry He
@@ -15,12 +15,56 @@ Early research on stock market prediction was based on random walk theory and th
 
 Yet the assumptions are often challenged, and recent research suggests that news / social media may be unpredictable but that very early indicators can be extracted online to predict changes in various economic and commercial indicators. This may conceivably also be the case for the stock market.
 
-<a href="https://youtu.be/EeF3UTkCoxY" target="_blank"><img src="https://i.ytimg.com/vi/3SKv3r0NWvA/hqdefault.jpg" alt="IMAGE ALT TEXT HERE" width="400" border="10" /></a>  << click to watch this trailer video
+<a href="https://youtu.be/a7ZpQadiyqs" target="_blank"><img src="https://hb.imgix.net/29fd791ab6e5738f14bb7f547675378b617a9e00.jpg?auto=compress,format&fit=crop&h=353&w=616&s=a8887ddc9d96988b11b46400691728ae" alt="Battlefield V" width="400" border="10" /></a>  << click to watch this trailer video
 
-A case in point is Call of Duty - Infinite Warfare. See the like/dislike ratio of the trailer video above. Apparently the video game producer mistakenly thought their market, i.e. the gaming community, were still keen on futurist / irrealist games.
+A case in point is Battlefield V. See the like/dislike ratio of the trailer video above. Apparently the video game producer (Electronic Art) mistakenly thought their market, i.e. the gaming community, were still keen on futurist / irrealist games. Although it's too early to say these were the only reason, EA stock price has indeed tumbled during the period:
 
-Could this sentiment be captured timely to generate alpha strategies?
+![try](/img/EA.png=300) 
 
-**Our initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements. Stay tuned!**
+Our project initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements. 
 
+As a starter, I did some exploratory textual analysis. Here I'd like to share how to make a wordcloud. Some example word cloud of some games:
+
+![try2](/img/battlefield V_wordcloud2.png=300) 
+![try3](/img/cod_wordcloud_try1.jpg.png=300) 
+![try](/img/pokemon_wordcloud_try2.png=300) 
+
+Here's the minimal version of python code to realise a wordcloud:
+```python
+# Start with loading all necessary libraries
+import numpy as np
+import pandas as pd
+from os import path
+from PIL import Image
+from wordcloud import WordCloud, STOPWORDS, ImageColorGenerator
+
+import matplotlib.pyplot as plt
+
+# Load the dataframe that contains comments
+# You can download all our raw on our github
+comments_df = pd.read_csv("Battlefield V_comments.csv", index_col=0)
+
+# Join comments 
+text = " ".join(t for t in comments_df.Comment)
+
+# Create stopword list:  
+stopwords = set(STOPWORDS)
+# we recommend using customised stop words apart from the set by word cloud
+stopwords.update(["like", "wait", "game"])
+
+# Generate a word cloud image
+wordcloud = WordCloud(stopwords=stopwords, background_color="black").generate(text)
+
+# Create and generate a word cloud image:
+wordcloud = WordCloud().generate(text)
+
+# Display the generated image:
+plt.imshow(wordcloud, interpolation='bilinear')
+plt.axis("off")
+plt.show()
+
+wordcloud.to_file("img/first_review.png")
+```
+
+Stay tuned!
 
