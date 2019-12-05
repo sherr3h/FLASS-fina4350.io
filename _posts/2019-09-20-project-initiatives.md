@@ -28,10 +28,10 @@ As a starter, I did some exploratory textual analysis. Here I'd like to share ho
 Battlefield V: <br/>
 <img src="/img/battlefield V_wordcloud2.png" alt="BattleV" width="500"/>
 
-Call of Duty Infinite Warefare: <br/>
+Call of Duty Infinite Warefare: 
 <img src="/img/cod_wordcloud_try1.jpg" alt="cod" width="500"/>
 
-Pokemon: Let's go, Pikachu! <br/>
+Pokemon: Let's go, Pikachu!
 <img src="/img/pokemon_wordcloud_try2.png" alt="Pikachu" width="500"/>
 
 Here's the minimal version of python code to realise a wordcloud:
@@ -71,5 +71,5 @@ plt.show()
 wordcloud.to_file("img/first_review.png")
 ```
 
-Stay tuned!
+Hope you find this interesting. Stay tuned to see updates of our project!
 
