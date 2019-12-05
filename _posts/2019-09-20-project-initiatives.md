@@ -18,8 +18,9 @@ Yet the assumptions are often challenged, and recent research suggests that news
 <a href="https://youtu.be/a7ZpQadiyqs" target="_blank"><img src="https://hb.imgix.net/29fd791ab6e5738f14bb7f547675378b617a9e00.jpg?auto=compress,format&fit=crop&h=353&w=616&s=a8887ddc9d96988b11b46400691728ae" alt="Battlefield V" width="400" border="10" /></a>  << click to watch this trailer video
 
 A case in point is Battlefield V. See the like/dislike ratio of the trailer video above. Apparently the video game producer (Electronic Art) mistakenly thought their market, i.e. the gaming community, were still keen on futurist / irrealist games. Although it's too early to say these were the only reason, EA stock price has indeed tumbled during the period:
-
-<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/EA.png" alt="EA" width="500"class="center"/>
+<img src="http://img.youtube.com/vi/YOUTUBE_VIDEO_ID_HERE/0.jpg" 
+alt="IMAGE ALT TEXT HERE" width="240" height="180" border="10" />
+<img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/EA.png" alt="EA" width="500" class="center"/>
 
 Our project initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements. 
 
