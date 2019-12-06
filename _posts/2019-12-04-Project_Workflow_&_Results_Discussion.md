@@ -66,6 +66,23 @@ For each of these models we needed to find the right combination of hyperparamet
 <br/>
 Parser and Parser_Financial select the Data, Master join it in a common DataFrame and finally Ridge, knn and MLP models are runned in their respective files to test large combination set of hyperparameters.
 
+# Results
+We were expecting to see the best results in the neuronal network MLP classifier, due to its really long processing time (it took us more than 24 hours to have our result file from MLP classifier), high complexity. The global enthusiasm concerning neuronal network had also biased us to see it as a “magical way” to get easy performance through large combination testing.<br />
+However, it seemed that our calibration of the model has failed to carry us further in performance than around 75% of accuracy on test data. This is quite deceptive for us but it is however a great leap forward to invest ourselves in the comprehension of such models architecture and notions.<br/>
+KNN classifier did not provide any satisfying results neither, with fewer combination testing  we had mainly took it as first indicator of latent data relationship on precise combination of A and B to test neuronal network model in a second step to optimize its running time. However, it has been the only model out of the three with high dispersion of A and B combinations. This made us dig through most combinations of A and B though we saved 75% of computing time by testing only 27’000 combinations out of 69’000.<br />
+With some distance, a better solution to save computing time from the three layers neuronal network parameters iteration would have been to compute over the whole model a 2 layers model with more limited parameters [from (1,1) to (50,50)]. This persistence of weight system through this heuristic would permits a better consistency between models and to better examine latent correlation between sentiment and stock price variation in the data.<br/>
+<br/>
+Finally, the Ridge  regression machine learning model has been our best performing model, though most of its satisfyingly performant regressions were concentrated in (A,B = 1) it has permitted with low standard deviation (less than 5%) to observe a significant correlation between YouTube movies’ trailers sentiments and StockPrice. Causality is a much more complicated relationship to prove however the repeated performance of Ridge regression over Alpha values and close combination of A and B have built confidence in our stock price prediction model.
+<br/>
+![try](/img/scores_review.png)
+<br/>
+The top 200 results present relatively similar homogeneous combinations of price prediction period and comment selection period, however by 201 the results give favor to a longer calibration of A & B. After 239 the results are not anymore ordered and a variety of combinations are represented.<br/>
+![try](/img/linear_ridge_regression_results.jpeg)
+<br/>
+
+Thanks for having took lecture of our project, we had a great time learning from various fields in this project and are greatly pleased to finally have a great output.<br/>
+Keep in touch with us and see you soon in other projects!👋🏽
+
 
 
 
