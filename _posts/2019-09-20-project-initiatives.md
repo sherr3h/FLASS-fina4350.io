@@ -9,7 +9,9 @@ comments: true
 ---
 by Sherry He
 
-Check out the comment section of those Youtube gaming videos. What do they say about the giant gaming firms' upcoming financial performances?
+Check out the comment section of those Youtube gaming videos. What do they say about the giant entertainment firms' upcoming financial performances?
+
+### Our motivation
 
 Early research on stock market prediction was based on random walk theory and the Efﬁcient Market Hypothesis (EMH), which assumes that EMH stock market prices are largely driven by new information, i.e. news, rather than present and past prices. Since news is unpredictable, stock market prices will follow a random walk pattern.
 
@@ -23,7 +25,9 @@ A case in point is Battlefield V. See the like/dislike ratio of the trailer vide
 
 Our project initiative is to use the comment section as an alternative data source and perdict gaming firms' financial performance and stock price movements. 
 
-As a starter, I did some exploratory textual analysis. Here I'd like to share how to make a wordcloud. Below are example word clouds of some games.
+### Closer look: text mining
+
+As a starter, I did some exploratory text mining. Here I'd like to share how to make a wordcloud. Below are example word clouds of some games.
 
 Battlefield V (which unfortunately received excessive negative reviews):  
 <img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/battlefieldV_wordcloud2.png?raw=true" alt="BattleV" width="500"/> 
