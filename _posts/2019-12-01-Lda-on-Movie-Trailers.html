@@ -75,13 +75,13 @@ Another way of thinking it is, if you are a fan of highlighters, and you use dif
 <p>If you (ask a machine to) persistently highlight all words in a corpus, removing meaningless words, you will get two distributions: 
   <ul>
   <li>Proportion of each <b> topic</b> in the corpus </li>
-  <li><b>word</b> distribution within each topic </li>
+  <li><b>Word</b> distribution within each topic </li>
 </ul>  
   <p align="center">
   <img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/item_topic_4.png?raw=true" alt="custom image2" width="400"/>
   </p>
   
-<p>And that's how the model "generates" probablistic word and topic distribution. In reality, the only observable structure is document. So the next step will be using Bayesian inference methods to estimate those distributions.</p>
+<p>And that's how the model "generates" probablistic word and topic distribution. Yet, in reality, the only observable data is document, and you have to infer the word and topic distributions based on what you see in the document. So the next step will be using Bayesian inference methods to estimate such distributions. There're several parametric and non-parametric Bayesian inference algorithm, such as Variational Inference and Markov-Chain Monte Carlo simulation. </p>
 
 <p>Instead of going deeper into maths, let's move on to our empirical study! </p>
 
