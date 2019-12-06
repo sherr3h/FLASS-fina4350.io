@@ -34,6 +34,12 @@ Call of Duty Infinite Warefare:
 Pokemon: Let's go, Pikachu!  
 <img src="https://github.com/sherr3h/sherr3h.github.io/blob/master/img/pokemon_wordcloud_try2.png?raw=true" alt="Pikachu" width="500" class="center"/>  
 
+Wordclouds are useful in several ways:
+* It's a direct representation of what's included in the document 
+* Wordclouds of different corpus can be used to intuitively compare the similarity (since our brain is certainly the best NLP machine :)
+* It can be used to check whether data pre-processing stage is done properly, e.g. if all stopwords are removed
+* It is eye-appalling and useful if you're going to talk about some boring data analysis later 
+
 Here's the minimal version of python code to realise a wordcloud:
 ```python
 # Start with loading all necessary libraries
