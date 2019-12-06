@@ -74,10 +74,14 @@ With some distance, a better solution to save computing time from the three laye
 <br/>
 Finally, the Ridge  regression machine learning model has been our best performing model, though most of its satisfyingly performant regressions were concentrated in (A,B = 1) it has permitted with low standard deviation (less than 5%) to observe a significant correlation between YouTube movies’ trailers sentiments and StockPrice. Causality is a much more complicated relationship to prove however the repeated performance of Ridge regression over Alpha values and close combination of A and B have built confidence in our stock price prediction model.
 <br/>
-![try](/img/scores_review.png)
 <br/>
-The top 200 results present relatively similar homogeneous combinations of price prediction period and comment selection period, however by 201 the results give favor to a longer calibration of A & B. After 239 the results are not anymore ordered and a variety of combinations are represented.<br/>
 ![try](/img/linear_ridge_regression_results.jpeg)
+<br/>
+<br/>
+The top 200 results present relatively similar homogeneous combinations of price prediction period and comment selection period, however by 201 the results give favor to a longer calibration of A & B. After 239 the results are not anymore ordered and a variety of combinations are represented.
+<br/>
+<br/>
+![try](/img/scores_review.png)
 <br/>
 
 Thanks for having took lecture of our project, we had a great time learning from various fields in this project and are greatly pleased to finally have a great output.<br/>
