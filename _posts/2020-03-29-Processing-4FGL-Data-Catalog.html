@@ -1642,7 +1642,7 @@ summary {
 
 <div id="data-source" class="section level3">
 <h3>Data Source</h3>
-<p>“FGL4.rData” are downloaded from Fermi LAT data products. “FGL4_tidy_for_FGL3.rData” are processed 4FGL data catalog. (<a href="https://fermi.gsfc.nasa.gov/ssc/data/access/" class="uri">https://fermi.gsfc.nasa.gov/ssc/data/access/</a> )</p>
+<p>“FGL4.rData” are downloaded from Fermi LAT data products. “FGL4_tidy_for_FGL3.rData” are processed 4FGL data catalog. (<a href="https://fermi.gsfc.nasa.gov/ssc/data/access/" class="uri">https://fermi.gsfc.nasa.gov/ssc/data/access/</a>)</p>
 </div>
 <div id="step-0-processing-4fgl-catalog" class="section level3">
 <h3>Step 0: Processing 4FGL catalog</h3>
@@ -1747,15 +1747,15 @@ FGL4_tidy &lt;- select(FGL4_05, -RAJ2000, -DEJ2000, -GLON, -Signif_Avg) %&gt;%
                           |CLASS1 == &quot;nlsy1&quot; | CLASS1 == &quot;NLSY1&quot; 
                           |CLASS1 == &quot;agn&quot; | CLASS1 == &quot;ssrq&quot; |CLASS1 == &quot;sey&quot; 
                           |CLASS2 == &quot;agn&quot; | CLASS2 == &quot;sey&quot;,
-                          labels = c(0, 1)), 
+                          labels = c(&quot;Non-AGN&quot;, &quot;AGN&quot;)), 
          pulsarness = factor(CLASS1 == &quot;PSR&quot; | CLASS1 == &quot;psr&quot; | CLASS2 == &quot;psr&quot;,
-                             labels = c(0, 1)))
+                          labels = c(&quot;Non-Pulsar&quot;, &quot;Pulsar&quot;)))
 
 FGL4_tidy_for_FGL3 &lt;- select(FGL4_tidy, -GLAT) %&gt;%
   mutate(Source_Name = substr(Source_Name, 6, 18), 
          FGL3_Source_name = trimws(substr(ASSOC_FGL,7,18)),
-         class = case_when(agnness == 1~&quot;AGN&quot;, pulsarness == 1~&quot;PSR&quot;, 
-                           (agnness == 0)&amp;(pulsarness == 0)~&quot;Other&quot;),
+         class = case_when(agnness == &quot;AGN&quot;~&quot;AGN&quot;, pulsarness == &quot;PSR&quot;~&quot;PSR&quot;, 
+                           (agnness == &quot;Non-AGN&quot;)&amp;(pulsarness == &quot;Non-Pulsar&quot;)~&quot;Other&quot;),
          class = factor(class, levels = c(&quot;AGN&quot;, &quot;PSR&quot;,&quot;Other&quot;))
   )
 
