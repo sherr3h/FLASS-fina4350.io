@@ -1,10 +1,10 @@
 # --- General options --- #
 
 # Name of website
-title: FLASS!
+title: Untitled SH Project
 
 # Short description of your site
-description: Predict gaming firms' financials using comments from Youtube gaming videos
+description: 
 
 # --- Local development options ---
 # If your website is hosted locally rather than on GitHub, then you need to uncomment the next two parameters to set the url and baseurl
