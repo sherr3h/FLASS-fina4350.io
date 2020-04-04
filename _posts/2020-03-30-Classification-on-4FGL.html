@@ -1,0 +1,1162 @@
+---
+layout: post
+title: Classification on 4FGL
+subtitle: Via Random Forest and Boosted LR
+gh-repo: sherr3h/sherr3h.github.io
+gh-badge: [star, fork, follow]
+tags: [PHYS3999, pulsar, FermiLAT]
+comments: true
+---
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+<! --   <title>Classification on 4FGL</title> --> 
+  <meta name="Author" content="SH">
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="1894.3">
+  <style type="text/css">
+    p.p3 {margin: 0.0px 0.0px 10.0px 0.0px; line-height: 20.0px; font: 14.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626}
+    p.p5 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; line-height: 20.0px; font: 14.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626}
+    p.p6 {margin: 0.0px 0.0px 0.0px 0.0px; text-align: center; line-height: 20.0px; font: 14.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626; min-height: 16.0px}
+    p.p7 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 13.0px Courier; color: #262626; -webkit-text-stroke: #262626; background-color: #f2f2f2}
+    p.p8 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 13.0px Courier; color: #262626; -webkit-text-stroke: #262626; background-color: #f2f2f2; min-height: 16.0px}
+    p.p9 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 13.0px Courier; color: #262626; -webkit-text-stroke: #262626; background-color: #ffffff}
+    p.p10 {margin: 0.0px 0.0px 0.0px 0.0px; line-height: 18.0px; font: 13.0px Courier; color: #262626; -webkit-text-stroke: #262626; background-color: #ffffff; min-height: 16.0px}
+    span.s1 {font-kerning: none}
+    span.s2 {font: 14.0px 'Helvetica Neue'; font-kerning: none; color: #2965a8; -webkit-text-stroke: 0px #2965a8}
+    span.s3 {font: 13.0px Menlo; font-kerning: none}
+    table.t1 {border-collapse: collapse}
+    td.td1 {width: 122.4px}
+    td.td2 {width: 118.8px}
+    td.td3 {width: 528.8px}
+  </style>
+</head>
+<body>
+<h1 style="margin: 0.0px 0.0px 10.0px 0.0px; line-height: 41.0px; font: 38.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626"><span class="s1">Classification on 4FGL</span></h1>
+<h4 style="margin: 0.0px 0.0px 10.0px 0.0px; line-height: 19.0px; font: 18.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626"><span class="s1">SH</span></h4>
+<p class="p3"><span class="s1">Reference publication: “Classification and Ranking of Fermi LAT Gamma-ray Sources from the 3FGL Catalog Using Machine Learning Techniques”, Saz Parkinson, P. M. (HKU/LSR, SCIPP), Xu, H. (HKU), Yu, P. L. H. (HKU), Salvetti, D. (INAF-Milan), Marelli, M. (INAF-Milan), and Falcone, A. D. (Penn State), The Astrophysical Journal, 2016, in press (<a href="http://arxiv.org/abs/1602.00385"><span class="s2">http://arxiv.org/abs/1602.00385</span></a>)</span></p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; line-height: 26.0px; font: 24.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626"><span class="s1">Difference on feature selection between 4FGL &amp; 3FGL results</span></h3>
+<table cellspacing="0" cellpadding="0" class="t1">
+  <tbody>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1"><b>4FGL field</b></span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p5"><span class="s1"><b>3FGL field</b></span></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p5"><span class="s1"><b>Note</b></span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1">PL_Flux_Density</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p5"><span class="s1">Flux_Density</span></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p5"><span class="s1">simple power-law form</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1">LP_Flux_Density</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p6"><span class="s1"></span><br></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p5"><span class="s1">LogParabola form, for all significantly curved spectra except pulsars</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1">PLEC_Flux_Density</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p6"><span class="s1"></span><br></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p5"><span class="s1">PLSuperExpCutoff form, a subexponentially cutoff power law for all significantly curved pulsars</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1">LP_SigCurv</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p5"><span class="s1">Signif_Curve</span></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p5"><span class="s1">Significance (in σ units) of the fit improvement between PowerLaw and PLSuperExpCutoff. A value greater than 4 indicates significant curvature</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1">PLEC SigCurv</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p6"><span class="s1"></span><br></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p6"><span class="s1"></span><br></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1">Flux_Band.2</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p5"><span class="s1">Flux100_300</span></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p6"><span class="s1"></span><br></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1">Flux_Band.3</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p5"><span class="s1">Flux300_1000</span></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p6"><span class="s1"></span><br></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1">Flux_Band.4</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p5"><span class="s1">Flux1000_3000</span></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p6"><span class="s1"></span><br></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1">Flux_Band.5</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p5"><span class="s1">Flux3000_10000</span></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p6"><span class="s1"></span><br></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1">Flux_Band.6</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p5"><span class="s1">Flux10000_100000</span></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p5"><span class="s1">replace 10-100 GeV with 10 - 30GeV</span></p>
+      </td>
+    </tr>
+    <tr>
+      <td valign="middle" class="td1">
+        <p class="p5"><span class="s1">Flux_Band.7</span></p>
+      </td>
+      <td valign="middle" class="td2">
+        <p class="p5"><span class="s1">Flux10000_100000</span></p>
+      </td>
+      <td valign="middle" class="td3">
+        <p class="p5"><span class="s1">replace 10-100 GeV with 30 - 300 GeV</span></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<h4 style="margin: 0.0px 0.0px 10.0px 0.0px; line-height: 19.0px; font: 18.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626"><span class="s1">Prediction results</span></h4>
+<p class="p3"><span class="s1">The LR (with backward stepwise elimination) accuracy &gt; RF; sensitivity to pulsar identifications RF &gt; LR</span></p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; line-height: 26.0px; font: 24.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626"><span class="s1">Step 1. Load fermicatsR package containing 4th Fermi LAT Catalogs; Getting and Cleaning Data</span></h3>
+<p class="p7"><span class="s1">setwd("/Users/sh/Documents/Aca/2019-20_sem2/PHYS3999")</span></p>
+<p class="p7"><span class="s1">library(devtools)</span></p>
+<p class="p7"><span class="s1"># load package w/o installing</span></p>
+<p class="p7"><span class="s1">load_all('fermicatsR')</span></p>
+<p class="p7"><span class="s1">library(fermicatsR)</span></p>
+<p class="p7"><span class="s1">library(dplyr)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Define function to compute SED points (energy flux at the geometric mean of the energy band)</span></p>
+<p class="p7"><span class="s1">sedflux &lt;- function(photon_flux, alpha, Elo, Ehi) {<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>R &lt;- Elo/Ehi</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>GeV2erg &lt;- 0.00160217657</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>(GeV2erg*Elo)*(alpha-1)*(photon_flux)*(R^(alpha/2 - 1))/(1-(R^(alpha-1)))</span></p>
+<p class="p7"><span class="s1">}</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Subselect small number of variables from those available in 4FGL</span></p>
+<p class="p7"><span class="s1">FGL4_01 &lt;- select(FGL4,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Source_Name, RAJ2000, DEJ2000, GLON, GLAT,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>PL_Index, LP_Index, PLEC_Index, #Spectral_Index,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Variability_Index,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Conf_68_SemiMajor, Conf_68_SemiMinor, Conf_68_PosAng,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Conf_95_SemiMajor, Conf_95_SemiMinor, Conf_95_PosAng,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Signif_Avg, <span class="Apple-converted-space">  </span>Pivot_Energy,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>PL_Flux_Density, <span class="Apple-converted-space">    </span>LP_Flux_Density, <span class="Apple-converted-space">    </span>PLEC_Flux_Density, #Flux_Density,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Unc_PL_Flux_Density, Unc_LP_Flux_Density, Unc_PLEC_Flux_Density, #Unc_Flux_Density,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Flux1000, Unc_Flux1000,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Energy_Flux100, Unc_Energy_Flux100,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>LP_SigCurv, <span class="Apple-converted-space">    </span>PLEC_SigCurv,<span class="Apple-converted-space">  </span>#Signif_Curve,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Signif_Avg,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Flux_Band.2, #Flux100_300,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Flux_Band.3, #Flux300_1000,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Flux_Band.4, #Flux1000_3000,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Flux_Band.5, #Flux3000_10000,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Flux_Band.6, # 10 to 30GeV; <span class="Apple-converted-space">  </span>#Flux10000_100000,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>Flux_Band.7, # 30 to 300 GeV</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>CLASS1, CLASS2, ASSOC1, ASSOC2) # CLASS2 = agn/unk</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Add new variables (SED points and hardness ratios) computed using sedflux function above</span></p>
+<p class="p7"><span class="s1">FGL4_02 &lt;- mutate(FGL4_01,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>SED100_300 = sedflux(Flux_Band.2, PL_Index, 0.1, 0.3),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>SED300_1000 = sedflux(Flux_Band.3, PL_Index, 0.3, 1.0),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>SED1000_3000 = sedflux(Flux_Band.4, PL_Index, 1.0, 3.0),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>SED3000_10000 = sedflux(Flux_Band.5, PL_Index, 3.0, 10.0),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>SED10000_30000 = sedflux(Flux_Band.6, PL_Index, 10.0, 30.0),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>SED30000_300000 = sedflux(Flux_Band.7, PL_Index, 30.0, 300.0),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>#SED100_300 = sedflux(Flux100_300, PL_Index, 0.1, 0.3),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>#SED300_1000 = sedflux(Flux300_1000, PL_Index, 0.3, 1.0),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>#SED1000_3000 = sedflux(Flux1000_3000, PL_Index, 1.0, 3.0),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>#SED3000_10000 = sedflux(Flux3000_10000, PL_Index, 3.0, 10.0),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>#SED10000_100000 = sedflux(Flux10000_100000, PL_Index, 10.0, 100.0),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>hr12 = (SED300_1000-SED100_300)/(SED300_1000+SED100_300),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>hr23 = (SED1000_3000-SED300_1000)/(SED1000_3000+SED300_1000),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>hr34 = (SED3000_10000-SED1000_3000)/(SED3000_10000+SED1000_3000),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>hr45 = (SED10000_30000-SED3000_10000)/(SED10000_30000+SED3000_10000),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>hr56 = (SED30000_300000-SED10000_30000)/(SED30000_300000+SED10000_30000),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>CLASS1 = gsub(" ", "", CLASS1),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>CLASS2 = gsub(" ", "", CLASS2))</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Drop highly correlated and some unused variables</span></p>
+<p class="p7"><span class="s1">FGL4_03 &lt;- select(FGL4_02,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>-Unc_Flux1000, -Energy_Flux100,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>-Conf_95_SemiMajor, -Conf_95_SemiMinor,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>-Conf_68_SemiMajor, -Conf_68_SemiMinor, -Conf_68_PosAng,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>-Flux1000,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>-SED100_300, -SED300_1000, -SED1000_3000, -SED3000_10000, #-SED10000_100000,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>-SED10000_30000, -SED30000_300000,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>-Flux_Band.2, -Flux_Band.3, -Flux_Band.4, -Flux_Band.5</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>#-Flux100_300, -Flux300_1000, -Flux1000_3000, -Flux3000_10000</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Take log of variables with highly skewed distributions (removing zeroes to avoid -Inf)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_04 &lt;- filter(FGL4_03, FGL4_03$LP_SigCurv != 0 &amp; FGL4_03$PLEC_SigCurv != 0) %&gt;%</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>mutate(Variability_Index = log(Variability_Index), Pivot_Energy = log(Pivot_Energy),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>PL_Flux_Density = log(PL_Flux_Density), <span class="Apple-converted-space">     </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>LP_Flux_Density = log(LP_Flux_Density),<span class="Apple-converted-space">     </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>PLEC_Flux_Density = log(PLEC_Flux_Density), <span class="Apple-converted-space">     </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>#Flux_Density = log(Flux_Density),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>Unc_PL_Flux_Density = log(Unc_PL_Flux_Density),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>Unc_LP_Flux_Density = log(Unc_LP_Flux_Density),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>Unc_PLEC_Flux_Density = log(Unc_PLEC_Flux_Density),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>#Unc_Flux_Density = log(Unc_Flux_Density),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>Unc_Energy_Flux100 = log(Unc_Energy_Flux100),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>#Flux_Band.6 = log (Flux_Band.6),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>Flux_Band.7 = log (Flux_Band.7),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>#Flux10000_100000 = log(Flux10000_100000),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>LP_SigCurv = log(LP_SigCurv), # to prevent -Inf</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>PLEC_SigCurv = log(PLEC_SigCurv),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>#Signif_Curve = log(Signif_Curve)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Drop a few more unused variables</span></p>
+<p class="p7"><span class="s1">FGL4_05 &lt;- select(FGL4_04, -Pivot_Energy,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>-Unc_PL_Flux_Density, -Unc_LP_Flux_Density, -Unc_PLEC_Flux_Density,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>#-Unc_Flux_Density, -Flux10000_100000</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                  </span>-Flux_Band.6, -Flux_Band.7)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Create a tidy data set including "pulsarness" and "agnness" factors</span></p>
+<p class="p7"><span class="s1">FGL4_tidy &lt;- select(FGL4_05, -RAJ2000, -DEJ2000, -GLON, -Signif_Avg) %&gt;%</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>mutate(agnness = factor(CLASS1 == "BCU" | CLASS1 == "bcu"<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                </span>|CLASS1 == "BLL" | CLASS1 == "bll"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                </span>|CLASS1 == "FSRQ"| CLASS1 == "fsrq"<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                </span>|CLASS1 == "rdg" | CLASS1 == "RDG"<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                </span>|CLASS1 == "nlsy1" | CLASS1 == "NLSY1"<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                </span>|CLASS1 == "agn" | CLASS1 == "ssrq" |CLASS1 == "sey"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                </span>|CLASS2 == "agn" | CLASS2 == "sey",</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                </span>labels = c("Non-AGN", "AGN")),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">               </span>pulsarness = factor(CLASS1 == "PSR" | CLASS1 == "psr"| CLASS2 == "psr",</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                </span>labels = c("Non-Pulsar", "Pulsar")))</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Create the FGL4_results data frame that will contain final results<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_results &lt;- select(FGL4_05, Source_Name,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>Signif = Signif_Avg,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>#Flux = Flux_Density,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>PL_Flux_Density,<span class="Apple-converted-space">     </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>LP_Flux_Density,<span class="Apple-converted-space">     </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>PLEC_Flux_Density,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>RA = RAJ2000,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>DEC = DEJ2000,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>GLON, GLAT, ASSOC1, CLASS1, ASSOC2, CLASS2</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>) %&gt;%</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>mutate(Source_Name = substr(Source_Name, 6, 18), RA = format(RA, digits = 2),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">               </span>DEC = format(DEC, digits = 2),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">               </span>GLON = format(GLON, digits = 2),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">               </span>GLAT = format(GLAT, digits = 2), Signif = round(Signif, digits = 3)) %&gt;%</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>mutate(PL_Flux_Density = format(exp(PL_Flux_Density), scientific = TRUE, digits = 3))%&gt;%</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>mutate(LP_Flux_Density = format(exp(LP_Flux_Density), scientific = TRUE, digits = 3))%&gt;%</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>mutate(PLEC_Flux_Density = format(exp(PLEC_Flux_Density), scientific = TRUE, digits = 3))</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>#mutate(Flux = format(exp(Flux), scientific = TRUE, digits = 3))</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Select data for PSR (pulsarness == "Pulsar") vs AGN (agnness == "AGN") classification</span></p>
+<p class="p7"><span class="s1">FGL4_AGNPSR &lt;- filter(FGL4_tidy, pulsarness == "Pulsar" | agnness == "AGN")</span></p>
+<p class="p7"><span class="s1"># Drop sources with missing values and some unused variables</span></p>
+<p class="p7"><span class="s1">FGL4_AGNPSR &lt;- na.omit(FGL4_AGNPSR)</span></p>
+<p class="p7"><span class="s1">FGL4_AGNPSR &lt;- select(FGL4_AGNPSR, -CLASS1, -ASSOC1, -ASSOC2, -CLASS2, -Source_Name, -GLAT, -Conf_95_PosAng, -agnness)</span></p>
+<p class="p7"><span class="s1"># Set Random seed</span></p>
+<p class="p7"><span class="s1">set.seed(1)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Separate into training (70%) and testing (30%) sets</span></p>
+<p class="p7"><span class="s1">train &lt;- sample(nrow(FGL4_AGNPSR), round(nrow(FGL4_AGNPSR)*0.7))<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_test &lt;- FGL4_AGNPSR[-train, ]</span></p>
+<p class="p7"><span class="s1">FGL4_train &lt;- FGL4_AGNPSR[train, ]</span></p>
+<p class="p7"><span class="s1"># Split training data into k (10) blocks for k-fold cross-validation</span></p>
+<p class="p7"><span class="s1">k &lt;- 10</span></p>
+<p class="p7"><span class="s1">Index &lt;- sample(nrow(FGL4_train))</span></p>
+<p class="p7"><span class="s1">Block_index &lt;- matrix(data = Index[1:(floor(nrow(FGL4_train)/k)*k)], nrow = k, byrow = TRUE)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_train_CV &lt;- FGL4_train[Index[1:(floor(nrow(FGL4_train)/k)*k)], ]</span></p>
+<p class="p7"><span class="s1"># Initialise predictions vector</span></p>
+<p class="p7"><span class="s1">predictions_FGL4_train_CV &lt;- rep(0, nrow(FGL4_train_CV))</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Prepare pulsar data sets for YNG vs MSP classification</span></p>
+<p class="p7"><span class="s1">pulsars_long &lt;- mutate(pulsars, PSR_coords = substr(PSR, 6, 12))<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_pulsars &lt;- FGL4_tidy %&gt;%</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>filter (pulsarness == "Pulsar") %&gt;% mutate(ASSOC1 = as.character(ASSOC1))</span></p>
+<p class="p7"><span class="s1">a &lt;- strsplit(FGL4_pulsars$ASSOC1, "PSR J")<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">b &lt;- character(nrow(FGL4_pulsars))</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1">for (i in 1:nrow(FGL4_pulsars)) {<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>b[i] &lt;- gsub(" ", "", a[[i]][2])</span></p>
+<p class="p7"><span class="s1">}</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1">FGL4_pulsars$ASSOC1_code &lt;- b</span></p>
+<p class="p7"><span class="s1">FGL4_pulsars &lt;- mutate(FGL4_pulsars, ASSOC1_code = substr(ASSOC1_code, 1, 7))<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">bothFGL4andpulsars &lt;- inner_join(pulsars_long, FGL4_pulsars,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                 </span>by = c("PSR_coords" = "ASSOC1_code"))<span class="Apple-converted-space">  </span># 230 obs</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1">bothFGL4andpulsars &lt;- bothFGL4andpulsars[ , !(names(bothFGL4andpulsars) %in% c("date_public"))]</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1">FGL4_Pulsars &lt;- mutate(bothFGL4andpulsars,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                       </span>pulsarness = factor(P_ms &gt;= 10, labels = c("MSP", "YNG"))) %&gt;%<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>select (-P_ms, -Codes, -RAJ_deg, -DECJ_deg, -Refs, -CLASS1, -ASSOC1, -CLASS2, -ASSOC2,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>-Source_Name, -PSR, -PSR_coords, -Edot, -agnness)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Separate pulsar data set into 30% (testing test) and 70% (training test)</span></p>
+<p class="p7"><span class="s1">set.seed (1)</span></p>
+<p class="p7"><span class="s1">train &lt;- sample(nrow(FGL4_Pulsars), round(nrow(FGL4_Pulsars)*0.7))<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_Pulsars_test &lt;- FGL4_Pulsars[-train, ]</span></p>
+<p class="p7"><span class="s1">FGL4_Pulsars_train &lt;- FGL4_Pulsars[train, ]</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Clean up and Set aside required data sets</span></p>
+<p class="p7"><span class="s1">Environ &lt;- ls()</span></p>
+<p class="p7"><span class="s1">Environ &lt;- Environ[Environ != "FGL4_tidy"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_results"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_test"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "predictions_FGL4_train_CV" &amp; Environ != "Block_index"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train_CV"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_Pulsars_train" &amp; Environ != "FGL4_Pulsars_test"]</span></p>
+<p class="p7"><span class="s1">rm(list = Environ)</span></p>
+<p class="p7"><span class="s1"># Save current workspace for subsequent steps</span></p>
+<p class="p7"><span class="s1">save.image()</span></p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; line-height: 26.0px; font: 24.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626"><span class="s1">Step 2. Function to get best threshold, plot ROC curves and print tables</span></h3>
+<p class="p7"><span class="s1"># Load workspace from previous step</span></p>
+<p class="p7"><span class="s1">load(".RData")</span></p>
+<p class="p7"><span class="s1"># Load pROC package</span></p>
+<p class="p7"><span class="s1">library(pROC)</span></p>
+<p class="p7"><span class="s1"># Function to get the best threshold</span></p>
+<p class="p7"><span class="s1">ROC_threshold &lt;- function(truth, prediction) {<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>ROC &lt;- roc(truth, prediction)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>ROC_table &lt;- cbind(ROC$thresholds, ROC$specificities, ROC$sensitivities)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>ROC_table[which.max(ROC_table[, 2] + ROC_table[, 3]), ]</span></p>
+<p class="p7"><span class="s1">}</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Function to plot ROC curves</span></p>
+<p class="p7"><span class="s1">ROC_plots &lt;- function(truth_train, prediction_train, truth_test, prediction_test) {<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>par(mfrow = c(1, 2))</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>ROC_train &lt;- roc(truth_train, prediction_train,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                         </span>plot = TRUE, print.auc = TRUE, main = "ROC</span><span class="s3">␣</span><span class="s1">Train", print.thres = "best")</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>ROC_test &lt;- roc(truth_test, prediction_test,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>plot = TRUE, print.auc = TRUE, main = "ROC</span><span class="s3">␣</span><span class="s1">Test", print.thres = "best")</span></p>
+<p class="p7"><span class="s1">}</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Function to generate contingency tables</span></p>
+<p class="p7"><span class="s1">ROC_tables &lt;- function(truth_train, prediction_train, truth_test, prediction_test,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                       </span>cat1 = "Pulsar", cat2 = "AGN") {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>ROC &lt;- roc(truth_train, prediction_train)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>ROC_table &lt;- cbind(ROC$thresholds, ROC$specificities, ROC$sensitivities)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>threshold &lt;- ROC_table[which.max(ROC_table[, 2] + ROC_table[, 3]), ]</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span># Training data</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>nrow_train &lt;- length(prediction_train)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>Predict_class_train &lt;- rep("NA", nrow_train)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>Predict_class_train &lt;- ifelse(prediction_train &gt; threshold[1], cat1, cat2)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>real_category &lt;- truth_train</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>print(table(Predict_class_train, real_category))</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">        </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span># Testing data</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>nrow_test &lt;- length(prediction_test)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>Predict_class_test &lt;- rep("NA", nrow_test)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>Predict_class_test &lt;- ifelse(prediction_test &gt; threshold[1], cat1, cat2)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>real_category &lt;- truth_test</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>print(table(Predict_class_test, real_category))</span></p>
+<p class="p7"><span class="s1">}</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1">ROC_threshold_plots_tables &lt;- function(truth_train, prediction_train, truth_test, prediction_test,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                       </span>threshold = 0, cat1 = "Pulsar", cat2 = "AGN") {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>if (threshold == 0) {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span># Compute best threshold if none is provided</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>ROC &lt;- roc(truth_train, prediction_train)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>ROC_table &lt;- cbind(ROC$thresholds, ROC$specificities, ROC$sensitivities)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>best_threshold &lt;- ROC_table[which.max(ROC_table[, 2] + ROC_table[, 3]), ]</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>} else {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span># Don't compute threshold if one is provided<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>best_threshold &lt;- threshold</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>if (nargs() &gt; 2) {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span># Make ROC plots</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>par(mfrow = c(1, 2))</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>ROC_train &lt;- roc(truth_train, prediction_train,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                 </span>plot = TRUE, print.auc = TRUE, main = "ROC Train", print.thres = "best")<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>ROC_test &lt;- roc(truth_test, prediction_test,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                </span>plot = TRUE, print.auc = TRUE, main = "ROC Test", print.thres = "best")</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span># Generate contingency tables</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span># Training data</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>nrow_train &lt;- length(prediction_train)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>Predict_class_train &lt;- rep("NA", nrow_train)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>Predict_class_train &lt;- ifelse(prediction_train &gt; best_threshold[1], cat1, cat2)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>real_category &lt;- truth_train</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>print(table(Predict_class_train, real_category))</span></p>
+<p class="p8"><span class="s1"><span class="Apple-converted-space">                </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span># Testing data</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>nrow_test &lt;- length(prediction_test)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>Predict_class_test &lt;- rep("NA", nrow_test)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>Predict_class_test &lt;- ifelse(prediction_test &gt; best_threshold[1], cat1, cat2)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>real_category &lt;- truth_test</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>print(table(Predict_class_test, real_category))</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>}<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>return(best_threshold)</span></p>
+<p class="p7"><span class="s1">}</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Function to get best threshold , plot ROC curves and print tables</span></p>
+<p class="p7"><span class="s1">ROCandTable &lt;- function(predictions_FGL4_train, FGL4_train,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>predictions_FGL4_test, FGL4_test, Best_threshold) {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span># Plot ROC curve and Table for train and testing data</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>par(mfrow = c(1, 2))</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span># Draw ROC for train_data</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>ROC_FGL4_train &lt;- roc(FGL4_train$pulsarness, predictions_FGL4_train,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                              </span>plot = TRUE, print.auc = TRUE, main = "ROC FGL4 Train",</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                              </span>print.thres = "best")<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span># Draw ROC for test_data</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>ROC_FGL4_test &lt;- roc(FGL4_test$pulsarness, predictions_FGL4_test,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                             </span>plot = TRUE, print.auc = TRUE, main="ROC FGL4 Test",</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                             </span>print.thres = "best")</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span># Using The Best Threshold from cross-validation method Best_threshold</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span># Table for training data</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>nrow_train &lt;- nrow(FGL4_train)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>Predict_class &lt;- rep("NA", nrow_train)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>for (i in 1:nrow_train) {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>if (predictions_FGL4_train[i] &lt;= Best_threshold[1]) {<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>Predict_class[i] &lt;- "AGN"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>} else {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>Predict_class[i] &lt;- "Pulsar"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>} }</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>real_category &lt;- FGL4_train$pulsarness<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>print(table(Predict_class, real_category))<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span># Table for testing data</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>nrow_test &lt;- nrow(FGL4_test)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>Predict_class &lt;- rep("NA", nrow_test)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>for (i in 1:nrow_test) {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>if (predictions_FGL4_test[i] &lt;= Best_threshold[1]){<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>Predict_class[i] &lt;- "AGN"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>} else {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                        </span>Predict_class[i] &lt;- "Pulsar"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                </span>}<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>}</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>real_category &lt;- FGL4_test$pulsarness<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>print(table(Predict_class, real_category))</span></p>
+<p class="p7"><span class="s1">}</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Save current workspace for subsequent steps</span></p>
+<p class="p7"><span class="s1">save.image()</span></p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; line-height: 26.0px; font: 24.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626"><span class="s1">Step 3. AGN vs PSR classification using Logistic Regression (LR) model (backward stepwise selection)</span></h3>
+<p class="p7"><span class="s1"># AGN vs PSR classification using Logistic Regression (LR) model (backward stepwise selection) # Load workspace from previous step</span></p>
+<p class="p7"><span class="s1">load(".RData")</span></p>
+<p class="p7"><span class="s1"># Load pROC package</span></p>
+<p class="p7"><span class="s1">library(pROC)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1">null &lt;- glm(pulsarness ~1, family = binomial, data = FGL4_train)</span></p>
+<p class="p7"><span class="s1">glm.step.backward.AIC &lt;- step(glm(pulsarness ~., family = binomial, data = FGL4_train),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                              </span>scope = list(lower = null, upper = glm(pulsarness ~.,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                              </span>family = binomial, data = FGL4_train)),</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                              </span>direction = "backward")</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">## Start:<span class="Apple-converted-space">  </span>AIC=258.89</span></p>
+<p class="p9"><span class="s1">## pulsarness ~ PL_Index + LP_Index + PLEC_Index + Variability_Index +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>PL_Flux_Density + LP_Flux_Density + PLEC_Flux_Density + Unc_Energy_Flux100 +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>LP_SigCurv + PLEC_SigCurv + hr12 + hr23 + hr34 + hr45 + hr56</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                      </span>Df Deviance<span class="Apple-converted-space">    </span>AIC</span></p>
+<p class="p9"><span class="s1">## - PLEC_SigCurv<span class="Apple-converted-space">        </span>1 <span class="Apple-converted-space">  </span>226.95 256.95</span></p>
+<p class="p9"><span class="s1">## - hr12<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>227.01 257.01</span></p>
+<p class="p9"><span class="s1">## - PLEC_Index<span class="Apple-converted-space">          </span>1 <span class="Apple-converted-space">  </span>227.11 257.11</span></p>
+<p class="p9"><span class="s1">## - PL_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>227.20 257.20</span></p>
+<p class="p9"><span class="s1">## - hr23<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>227.81 257.81</span></p>
+<p class="p9"><span class="s1">## - PL_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>227.96 257.96</span></p>
+<p class="p9"><span class="s1">## - LP_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>227.99 257.99</span></p>
+<p class="p9"><span class="s1">## - PLEC_Flux_Density <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>228.19 258.19</span></p>
+<p class="p9"><span class="s1">## &lt;none&gt;<span class="Apple-converted-space">                    </span>226.89 258.89</span></p>
+<p class="p9"><span class="s1">## - Unc_Energy_Flux100<span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>229.14 259.14</span></p>
+<p class="p9"><span class="s1">## - hr34<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>229.35 259.35</span></p>
+<p class="p9"><span class="s1">## - hr56<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>231.33 261.33</span></p>
+<p class="p9"><span class="s1">## - LP_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>234.15 264.15</span></p>
+<p class="p9"><span class="s1">## - LP_SigCurv<span class="Apple-converted-space">          </span>1 <span class="Apple-converted-space">  </span>240.52 270.52</span></p>
+<p class="p9"><span class="s1">## - hr45<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>241.35 271.36</span></p>
+<p class="p9"><span class="s1">## - Variability_Index <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>305.88 335.89</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Step:<span class="Apple-converted-space">  </span>AIC=256.95</span></p>
+<p class="p9"><span class="s1">## pulsarness ~ PL_Index + LP_Index + PLEC_Index + Variability_Index +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>PL_Flux_Density + LP_Flux_Density + PLEC_Flux_Density + Unc_Energy_Flux100 +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>LP_SigCurv + hr12 + hr23 + hr34 + hr45 + hr56</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                      </span>Df Deviance<span class="Apple-converted-space">    </span>AIC</span></p>
+<p class="p9"><span class="s1">## - hr12<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>227.07 255.07</span></p>
+<p class="p9"><span class="s1">## - PLEC_Index<span class="Apple-converted-space">          </span>1 <span class="Apple-converted-space">  </span>227.15 255.15</span></p>
+<p class="p9"><span class="s1">## - PL_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>227.22 255.22</span></p>
+<p class="p9"><span class="s1">## - hr23<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>227.89 255.89</span></p>
+<p class="p9"><span class="s1">## - LP_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>228.03 256.04</span></p>
+<p class="p9"><span class="s1">## - PL_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>228.06 256.06</span></p>
+<p class="p9"><span class="s1">## - PLEC_Flux_Density <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>228.24 256.24</span></p>
+<p class="p9"><span class="s1">## &lt;none&gt;<span class="Apple-converted-space">                    </span>226.95 256.95</span></p>
+<p class="p9"><span class="s1">## - hr34<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>229.47 257.47</span></p>
+<p class="p9"><span class="s1">## - Unc_Energy_Flux100<span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>229.54 257.54</span></p>
+<p class="p9"><span class="s1">## - hr56<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>231.55 259.55</span></p>
+<p class="p9"><span class="s1">## - LP_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>234.52 262.52</span></p>
+<p class="p9"><span class="s1">## - hr45<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>242.97 270.97</span></p>
+<p class="p9"><span class="s1">## - LP_SigCurv<span class="Apple-converted-space">          </span>1 <span class="Apple-converted-space">  </span>289.93 317.93</span></p>
+<p class="p9"><span class="s1">## - Variability_Index <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>307.18 335.18</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Step:<span class="Apple-converted-space">  </span>AIC=255.07</span></p>
+<p class="p9"><span class="s1">## pulsarness ~ PL_Index + LP_Index + PLEC_Index + Variability_Index +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>PL_Flux_Density + LP_Flux_Density + PLEC_Flux_Density + Unc_Energy_Flux100 +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>LP_SigCurv + hr23 + hr34 + hr45 + hr56</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                      </span>Df Deviance<span class="Apple-converted-space">    </span>AIC</span></p>
+<p class="p9"><span class="s1">## - PLEC_Index<span class="Apple-converted-space">          </span>1 <span class="Apple-converted-space">  </span>227.29 253.29</span></p>
+<p class="p9"><span class="s1">## - PL_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>227.35 253.35</span></p>
+<p class="p9"><span class="s1">## - hr23<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>227.94 253.94</span></p>
+<p class="p9"><span class="s1">## - PL_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>228.09 254.09</span></p>
+<p class="p9"><span class="s1">## - LP_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>228.13 254.13</span></p>
+<p class="p9"><span class="s1">## - PLEC_Flux_Density <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>228.35 254.35</span></p>
+<p class="p9"><span class="s1">## &lt;none&gt;<span class="Apple-converted-space">                    </span>227.07 255.07</span></p>
+<p class="p9"><span class="s1">## - Unc_Energy_Flux100<span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>229.73 255.73</span></p>
+<p class="p9"><span class="s1">## - hr34<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>229.85 255.85</span></p>
+<p class="p9"><span class="s1">## - hr56<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>231.60 257.61</span></p>
+<p class="p9"><span class="s1">## - LP_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>234.55 260.55</span></p>
+<p class="p9"><span class="s1">## - hr45<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>243.25 269.25</span></p>
+<p class="p9"><span class="s1">## - LP_SigCurv<span class="Apple-converted-space">          </span>1 <span class="Apple-converted-space">  </span>290.09 316.09</span></p>
+<p class="p9"><span class="s1">## - Variability_Index <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>307.83 333.83</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Step:<span class="Apple-converted-space">  </span>AIC=253.29</span></p>
+<p class="p9"><span class="s1">## pulsarness ~ PL_Index + LP_Index + Variability_Index + PL_Flux_Density +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>LP_Flux_Density + PLEC_Flux_Density + Unc_Energy_Flux100 +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>LP_SigCurv + hr23 + hr34 + hr45 + hr56</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                      </span>Df Deviance<span class="Apple-converted-space">    </span>AIC</span></p>
+<p class="p9"><span class="s1">## - hr23<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>228.40 252.39</span></p>
+<p class="p9"><span class="s1">## - LP_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>228.63 252.64</span></p>
+<p class="p9"><span class="s1">## - PL_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>228.87 252.87</span></p>
+<p class="p9"><span class="s1">## &lt;none&gt;<span class="Apple-converted-space">                    </span>227.29 253.29</span></p>
+<p class="p9"><span class="s1">## - PL_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>229.37 253.37</span></p>
+<p class="p9"><span class="s1">## - PLEC_Flux_Density <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>229.65 253.65</span></p>
+<p class="p9"><span class="s1">## - hr34<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>230.09 254.09</span></p>
+<p class="p9"><span class="s1">## - Unc_Energy_Flux100<span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>231.93 255.93</span></p>
+<p class="p9"><span class="s1">## - hr56<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>232.11 256.11</span></p>
+<p class="p9"><span class="s1">## - LP_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>239.57 263.57</span></p>
+<p class="p9"><span class="s1">## - hr45<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>244.09 268.09</span></p>
+<p class="p9"><span class="s1">## - LP_SigCurv<span class="Apple-converted-space">          </span>1 <span class="Apple-converted-space">  </span>294.61 318.61</span></p>
+<p class="p9"><span class="s1">## - Variability_Index <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>308.55 332.55</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Step:<span class="Apple-converted-space">  </span>AIC=252.39</span></p>
+<p class="p9"><span class="s1">## pulsarness ~ PL_Index + LP_Index + Variability_Index + PL_Flux_Density +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>LP_Flux_Density + PLEC_Flux_Density + Unc_Energy_Flux100 +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>LP_SigCurv + hr34 + hr45 + hr56</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                      </span>Df Deviance<span class="Apple-converted-space">    </span>AIC</span></p>
+<p class="p9"><span class="s1">## - LP_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>229.53 251.53</span></p>
+<p class="p9"><span class="s1">## - PL_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>229.65 251.65</span></p>
+<p class="p9"><span class="s1">## &lt;none&gt;<span class="Apple-converted-space">                    </span>228.40 252.39</span></p>
+<p class="p9"><span class="s1">## - PLEC_Flux_Density <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>230.55 252.55</span></p>
+<p class="p9"><span class="s1">## - PL_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>230.90 252.90</span></p>
+<p class="p9"><span class="s1">## - hr34<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>231.60 253.60</span></p>
+<p class="p9"><span class="s1">## - Unc_Energy_Flux100<span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>232.65 254.65</span></p>
+<p class="p9"><span class="s1">## - hr56<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>232.77 254.77</span></p>
+<p class="p9"><span class="s1">## - LP_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>241.44 263.44</span></p>
+<p class="p9"><span class="s1">## - hr45<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>244.10 266.10</span></p>
+<p class="p9"><span class="s1">## - LP_SigCurv<span class="Apple-converted-space">          </span>1 <span class="Apple-converted-space">  </span>296.45 318.45</span></p>
+<p class="p9"><span class="s1">## - Variability_Index <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>309.80 331.80</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Step:<span class="Apple-converted-space">  </span>AIC=251.53</span></p>
+<p class="p9"><span class="s1">## pulsarness ~ PL_Index + LP_Index + Variability_Index + PL_Flux_Density +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>PLEC_Flux_Density + Unc_Energy_Flux100 + LP_SigCurv + hr34 +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>hr45 + hr56</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                      </span>Df Deviance<span class="Apple-converted-space">    </span>AIC</span></p>
+<p class="p9"><span class="s1">## - PL_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>230.38 250.38</span></p>
+<p class="p9"><span class="s1">## - PL_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>231.47 251.47</span></p>
+<p class="p9"><span class="s1">## &lt;none&gt;<span class="Apple-converted-space">                    </span>229.53 251.53</span></p>
+<p class="p9"><span class="s1">## - PLEC_Flux_Density <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>231.91 251.91</span></p>
+<p class="p9"><span class="s1">## - Unc_Energy_Flux100<span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>232.82 252.82</span></p>
+<p class="p9"><span class="s1">## - hr56<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>234.03 254.03</span></p>
+<p class="p9"><span class="s1">## - hr34<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>234.19 254.19</span></p>
+<p class="p9"><span class="s1">## - LP_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>241.61 261.61</span></p>
+<p class="p9"><span class="s1">## - hr45<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>244.11 264.11</span></p>
+<p class="p9"><span class="s1">## - LP_SigCurv<span class="Apple-converted-space">          </span>1 <span class="Apple-converted-space">  </span>297.01 317.01</span></p>
+<p class="p9"><span class="s1">## - Variability_Index <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>311.37 331.37</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Step:<span class="Apple-converted-space">  </span>AIC=250.38</span></p>
+<p class="p9"><span class="s1">## pulsarness ~ LP_Index + Variability_Index + PL_Flux_Density +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>PLEC_Flux_Density + Unc_Energy_Flux100 + LP_SigCurv + hr34 +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>hr45 + hr56</span></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p10"><span class="s1"></span><br></p>
+<p class="p9"><span class="s1">## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                      </span>Df Deviance<span class="Apple-converted-space">    </span>AIC</span></p>
+<p class="p9"><span class="s1">## &lt;none&gt;<span class="Apple-converted-space">                    </span>230.38 250.38</span></p>
+<p class="p9"><span class="s1">## - PL_Flux_Density <span class="Apple-converted-space">    </span>1 <span class="Apple-converted-space">  </span>232.53 250.53</span></p>
+<p class="p9"><span class="s1">## - PLEC_Flux_Density <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>233.47 251.47</span></p>
+<p class="p9"><span class="s1">## - hr56<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>234.27 252.27</span></p>
+<p class="p9"><span class="s1">## - Unc_Energy_Flux100<span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>234.33 252.33</span></p>
+<p class="p9"><span class="s1">## - hr34<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>235.50 253.50</span></p>
+<p class="p9"><span class="s1">## - hr45<span class="Apple-converted-space">                </span>1 <span class="Apple-converted-space">  </span>244.72 262.72</span></p>
+<p class="p9"><span class="s1">## - LP_Index<span class="Apple-converted-space">            </span>1 <span class="Apple-converted-space">  </span>245.96 263.96</span></p>
+<p class="p9"><span class="s1">## - Variability_Index <span class="Apple-converted-space">  </span>1 <span class="Apple-converted-space">  </span>312.70 330.70</span></p>
+<p class="p9"><span class="s1">## - LP_SigCurv<span class="Apple-converted-space">          </span>1 <span class="Apple-converted-space">  </span>351.29 369.29</span></p>
+<p class="p7"><span class="s1">print(summary(glm.step.backward.AIC))</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Call:</span></p>
+<p class="p9"><span class="s1">## glm(formula = pulsarness ~ LP_Index + Variability_Index + PL_Flux_Density +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>PLEC_Flux_Density + Unc_Energy_Flux100 + LP_SigCurv + hr34 +<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>hr45 + hr56, family = binomial, data = FGL4_train)</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Deviance Residuals:<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>Min <span class="Apple-converted-space">      </span>1Q <span class="Apple-converted-space">  </span>Median <span class="Apple-converted-space">      </span>3Q<span class="Apple-converted-space">      </span>Max <span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## -2.6707<span class="Apple-converted-space">  </span>-0.0667<span class="Apple-converted-space">  </span>-0.0202<span class="Apple-converted-space">  </span>-0.0028 <span class="Apple-converted-space">  </span>3.5256 <span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Coefficients:</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                    </span>Estimate Std. Error z value Pr(&gt;|z|) <span class="Apple-converted-space">   </span></span></p>
+<p class="p9"><span class="s1">## (Intercept)<span class="Apple-converted-space">        </span>-14.8094<span class="Apple-converted-space">    </span>10.4477<span class="Apple-converted-space">  </span>-1.417 0.156344 <span class="Apple-converted-space">   </span></span></p>
+<p class="p9"><span class="s1">## LP_Index <span class="Apple-converted-space">            </span>3.4545 <span class="Apple-converted-space">    </span>0.8350 <span class="Apple-converted-space">  </span>4.137 3.52e-05 ***</span></p>
+<p class="p9"><span class="s1">## Variability_Index <span class="Apple-converted-space">  </span>-1.2929 <span class="Apple-converted-space">    </span>0.1772<span class="Apple-converted-space">  </span>-7.295 2.98e-13 ***</span></p>
+<p class="p9"><span class="s1">## PL_Flux_Density<span class="Apple-converted-space">      </span>1.6695 <span class="Apple-converted-space">    </span>1.0152 <span class="Apple-converted-space">  </span>1.644 0.100083 <span class="Apple-converted-space">   </span></span></p>
+<p class="p9"><span class="s1">## PLEC_Flux_Density <span class="Apple-converted-space">  </span>-2.2327 <span class="Apple-converted-space">    </span>1.1030<span class="Apple-converted-space">  </span>-2.024 0.042954 * <span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Unc_Energy_Flux100 <span class="Apple-converted-space">  </span>0.5704 <span class="Apple-converted-space">    </span>0.2946 <span class="Apple-converted-space">  </span>1.937 0.052790 . <span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## LP_SigCurv <span class="Apple-converted-space">          </span>5.5224 <span class="Apple-converted-space">    </span>0.6185 <span class="Apple-converted-space">  </span>8.928<span class="Apple-converted-space">  </span>&lt; 2e-16 ***</span></p>
+<p class="p9"><span class="s1">## hr34 <span class="Apple-converted-space">                </span>1.6587 <span class="Apple-converted-space">    </span>0.6721 <span class="Apple-converted-space">  </span>2.468 0.013590 * <span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## hr45<span class="Apple-converted-space">                </span>-1.9992 <span class="Apple-converted-space">    </span>0.5970<span class="Apple-converted-space">  </span>-3.349 0.000812 ***</span></p>
+<p class="p9"><span class="s1">## hr56<span class="Apple-converted-space">                </span>-0.5503 <span class="Apple-converted-space">    </span>0.2812<span class="Apple-converted-space">  </span>-1.957 0.050308 . <span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## ---</span></p>
+<p class="p9"><span class="s1">## Signif. codes:<span class="Apple-converted-space">  </span>0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## (Dispersion parameter for binomial family taken to be 1)</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">    </span>Null deviance: 1189.30<span class="Apple-converted-space">  </span>on 2460<span class="Apple-converted-space">  </span>degrees of freedom</span></p>
+<p class="p9"><span class="s1">## Residual deviance:<span class="Apple-converted-space">  </span>230.38<span class="Apple-converted-space">  </span>on 2451<span class="Apple-converted-space">  </span>degrees of freedom</span></p>
+<p class="p9"><span class="s1">## AIC: 250.38</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Number of Fisher Scoring iterations: 9</span></p>
+<p class="p7"><span class="s1">predictions_FGL4_train &lt;- predict(glm.step.backward.AIC, FGL4_train, type = "response")<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">predictions_FGL4_test &lt;- predict(glm.step.backward.AIC, FGL4_test, type = "response")</span></p>
+<p class="p7"><span class="s1"># Get Training Set threshold, generate ROC plots, and print contingency tables</span></p>
+<p class="p7"><span class="s1">Best_threshold_train &lt;- ROC_threshold_plots_tables(FGL4_train$pulsarness, predictions_FGL4_train,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                                   </span>FGL4_test$pulsarness, predictions_FGL4_test)</span></p>
+<p class="p3"><span class="s1"><img src="file:///unknown.png" alt="unknown.png"></span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                    </span>real_category</span></p>
+<p class="p9"><span class="s1">## Predict_class_train Non-Pulsar Pulsar</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">              </span>AGN<span class="Apple-converted-space">          </span>2190<span class="Apple-converted-space">      </span>5</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">              </span>Pulsar<span class="Apple-converted-space">        </span>110<span class="Apple-converted-space">    </span>156</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">                  </span>real_category</span></p>
+<p class="p9"><span class="s1">## Predict_class_test Non-Pulsar Pulsar</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">            </span>AGN <span class="Apple-converted-space">          </span>919<span class="Apple-converted-space">      </span>7</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">            </span>Pulsar <span class="Apple-converted-space">        </span>49 <span class="Apple-converted-space">    </span>80</span></p>
+<p class="p7"><span class="s1"># Add LR Prediction Probabilities to FGL3_results data frame:<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_results$LR_P &lt;- round(predict(glm.step.backward.AIC, FGL4_tidy,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                        </span>type = "response"), digits = 3)</span></p>
+<p class="p7"><span class="s1"># Add LR Prediction category to FGL3_results data frame:</span></p>
+<p class="p7"><span class="s1">FGL4_results$LR_Pred &lt;- ifelse(FGL4_results$LR_P &gt; Best_threshold_train[1],</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                               </span>"PSR", "AGN")</span></p>
+<p class="p7"><span class="s1"># Clean up and Set aside required data sets</span></p>
+<p class="p7"><span class="s1">Environ &lt;- ls()</span></p>
+<p class="p7"><span class="s1">Environ &lt;- Environ[Environ != "FGL4_tidy"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_results"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_test"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "predictions_FGL4_train_CV" &amp; Environ != "Block_index"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train_CV"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "ROC_threshold_plots_tables" &amp; Environ != "FGL4_Pulsars_train"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_Pulsars_test"]</span></p>
+<p class="p7"><span class="s1">rm(list = Environ)</span></p>
+<p class="p7"><span class="s1"># Save current workspace for subsequent steps</span></p>
+<p class="p7"><span class="s1">save.image()</span></p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; line-height: 26.0px; font: 24.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626"><span class="s1">Step 4. AGN vs PSR classification using Random Forests (RF)</span></h3>
+<p class="p7"><span class="s1"># AGN vs PSR classification using Random Forests (RF) # Load workspace from previous step</span></p>
+<p class="p7"><span class="s1">load(".RData")</span></p>
+<p class="p7"><span class="s1"># Load randomForest package</span></p>
+<p class="p7"><span class="s1">library(randomForest)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">set.seed(1)</span></p>
+<p class="p7"><span class="s1"># First use 10-fold cross validation method to fit models and get the forecast of each block of data<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">k &lt;- 10</span></p>
+<p class="p7"><span class="s1">for (i in 1:k) {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>Model &lt;- randomForest(pulsarness~., data = FGL4_train[-Block_index[i, ], ], importance = TRUE)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>predictions_FGL4_train_CV[((i-1)*(nrow(FGL4_train_CV)/k) + 1):((i)*(nrow(FGL4_train_CV)/k))] &lt;-predict(Model, newdata = FGL4_train[Block_index[i, ], ], type = "Prob")[, 2]<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>print(i)</span></p>
+<p class="p7"><span class="s1">}</span></p>
+<p class="p9"><span class="s1">## [1] 1</span></p>
+<p class="p9"><span class="s1">## [1] 2</span></p>
+<p class="p9"><span class="s1">## [1] 3</span></p>
+<p class="p9"><span class="s1">## [1] 4</span></p>
+<p class="p9"><span class="s1">## [1] 5</span></p>
+<p class="p9"><span class="s1">## [1] 6</span></p>
+<p class="p9"><span class="s1">## [1] 7</span></p>
+<p class="p9"><span class="s1">## [1] 8</span></p>
+<p class="p9"><span class="s1">## [1] 9</span></p>
+<p class="p9"><span class="s1">## [1] 10</span></p>
+<p class="p7"><span class="s1"># Get best threshold</span></p>
+<p class="p7"><span class="s1">Best_threshold_train_CV &lt;- ROC_threshold_plots_tables(FGL4_train_CV$pulsarness,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                                      </span>predictions_FGL4_train_CV)</span></p>
+<p class="p7"><span class="s1"># Now Modeling using all the data</span></p>
+<p class="p7"><span class="s1">rf.full.FGL4 &lt;- randomForest(pulsarness~., data = FGL4_train, importance = TRUE)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"># The importance of each variable</span></p>
+<p class="p7"><span class="s1">importance(rf.full.FGL4)</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                    </span>Non-Pulsar<span class="Apple-converted-space">    </span>Pulsar MeanDecreaseAccuracy MeanDecreaseGini</span></p>
+<p class="p9"><span class="s1">## PL_Index<span class="Apple-converted-space">            </span>10.749548<span class="Apple-converted-space">  </span>4.707146<span class="Apple-converted-space">            </span>11.596201 <span class="Apple-converted-space">        </span>7.303517</span></p>
+<p class="p9"><span class="s1">## LP_Index<span class="Apple-converted-space">            </span>11.175863<span class="Apple-converted-space">  </span>5.168000<span class="Apple-converted-space">            </span>11.800246 <span class="Apple-converted-space">        </span>7.220945</span></p>
+<p class="p9"><span class="s1">## PLEC_Index<span class="Apple-converted-space">          </span>18.262145 17.951777<span class="Apple-converted-space">            </span>24.366449<span class="Apple-converted-space">        </span>31.455596</span></p>
+<p class="p9"><span class="s1">## Variability_Index <span class="Apple-converted-space">  </span>25.177155 23.187350<span class="Apple-converted-space">            </span>28.600007<span class="Apple-converted-space">        </span>29.158597</span></p>
+<p class="p9"><span class="s1">## PL_Flux_Density <span class="Apple-converted-space">    </span>11.585447<span class="Apple-converted-space">  </span>3.235785<span class="Apple-converted-space">            </span>12.001453<span class="Apple-converted-space">        </span>10.888308</span></p>
+<p class="p9"><span class="s1">## LP_Flux_Density <span class="Apple-converted-space">    </span>10.669147<span class="Apple-converted-space">  </span>6.807005<span class="Apple-converted-space">            </span>11.493312<span class="Apple-converted-space">        </span>10.342554</span></p>
+<p class="p9"><span class="s1">## PLEC_Flux_Density <span class="Apple-converted-space">  </span>10.951916<span class="Apple-converted-space">  </span>6.198883<span class="Apple-converted-space">            </span>11.590474<span class="Apple-converted-space">        </span>10.591904</span></p>
+<p class="p9"><span class="s1">## Unc_Energy_Flux100<span class="Apple-converted-space">  </span>20.814311 15.728209<span class="Apple-converted-space">            </span>25.075722<span class="Apple-converted-space">        </span>28.473580</span></p>
+<p class="p9"><span class="s1">## LP_SigCurv<span class="Apple-converted-space">          </span>23.965458 24.312085<span class="Apple-converted-space">            </span>29.040777<span class="Apple-converted-space">        </span>57.754499</span></p>
+<p class="p9"><span class="s1">## PLEC_SigCurv<span class="Apple-converted-space">        </span>22.961243 23.174464<span class="Apple-converted-space">            </span>28.537537<span class="Apple-converted-space">        </span>57.325202</span></p>
+<p class="p9"><span class="s1">## hr12<span class="Apple-converted-space">                </span>12.697447<span class="Apple-converted-space">  </span>1.410022<span class="Apple-converted-space">            </span>13.082795 <span class="Apple-converted-space">        </span>9.705823</span></p>
+<p class="p9"><span class="s1">## hr23<span class="Apple-converted-space">                </span>10.994070<span class="Apple-converted-space">  </span>9.101414<span class="Apple-converted-space">            </span>13.238782<span class="Apple-converted-space">        </span>10.770872</span></p>
+<p class="p9"><span class="s1">## hr34 <span class="Apple-converted-space">                </span>9.164681<span class="Apple-converted-space">  </span>6.378580<span class="Apple-converted-space">            </span>11.166502 <span class="Apple-converted-space">        </span>5.612537</span></p>
+<p class="p9"><span class="s1">## hr45 <span class="Apple-converted-space">                </span>7.968328 19.588845<span class="Apple-converted-space">            </span>19.765851<span class="Apple-converted-space">        </span>19.290869</span></p>
+<p class="p9"><span class="s1">## hr56 <span class="Apple-converted-space">                </span>5.371073<span class="Apple-converted-space">  </span>6.220241 <span class="Apple-converted-space">            </span>7.761515 <span class="Apple-converted-space">        </span>6.052140</span></p>
+<p class="p7"><span class="s1">varImpPlot(rf.full.FGL4)</span></p>
+<p class="p3"><span class="s1"><img src="file:///unknown_1.png" alt="unknown_1.png"></span></p>
+<p class="p7"><span class="s1"># Prediction for train and test</span></p>
+<p class="p7"><span class="s1">predictions_FGL4_train &lt;- predict(rf.full.FGL4, newdata = FGL4_train, type = "Prob")[, 2]<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">predictions_FGL4_test &lt;- predict(rf.full.FGL4, newdata = FGL4_test, type = "Prob")[,2 ]</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Generate ROC plots, and print contingency tables</span></p>
+<p class="p7"><span class="s1">ROC_threshold_plots_tables(FGL4_train$pulsarness, predictions_FGL4_train,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                           </span>FGL4_test$pulsarness, predictions_FGL4_test, threshold = Best_threshold_train_CV[1])<span class="Apple-converted-space"> </span></span></p>
+<p class="p3"><span class="s1"><img src="file:///unknown_2.png" alt="unknown_2.png"></span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                    </span>real_category</span></p>
+<p class="p9"><span class="s1">## Predict_class_train Non-Pulsar Pulsar</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">              </span>AGN<span class="Apple-converted-space">          </span>2284<span class="Apple-converted-space">      </span>0</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">              </span>Pulsar <span class="Apple-converted-space">        </span>16<span class="Apple-converted-space">    </span>161</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">                  </span>real_category</span></p>
+<p class="p9"><span class="s1">## Predict_class_test Non-Pulsar Pulsar</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">            </span>AGN <span class="Apple-converted-space">          </span>944<span class="Apple-converted-space">      </span>9</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">            </span>Pulsar <span class="Apple-converted-space">        </span>24 <span class="Apple-converted-space">    </span>78</span></p>
+<p class="p9"><span class="s1">## [1] 0.128</span></p>
+<p class="p7"><span class="s1">cat("Best threshold from cross-validation:", Best_threshold_train_CV)</span></p>
+<p class="p9"><span class="s1">## Best threshold from cross-validation: 0.128 0.9717268 0.9130435</span></p>
+<p class="p7"><span class="s1"># Add RF Prediction probabilities to FGL3_results</span></p>
+<p class="p7"><span class="s1">FGL4_results$RF_P &lt;- predict(rf.full.FGL4, newdata = FGL4_tidy, type = "Prob")[,2 ]<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">#FGL3_results &lt;- mutate(FGL3_results, RF_P)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Add RF Prediction category to FGL3_results</span></p>
+<p class="p7"><span class="s1">FGL4_results$RF_Pred &lt;- ifelse(FGL4_results$RF_P &gt; Best_threshold_train_CV[1],</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                               </span>c("PSR"), c("AGN"))</span></p>
+<p class="p7"><span class="s1"># Plot for the paper</span></p>
+<p class="p7"><span class="s1">par(mfrow = c(1,1))</span></p>
+<p class="p7"><span class="s1">varImpPlot(rf.full.FGL4, pch = 19, type = 1, main = "")</span></p>
+<p class="p3"><span class="s1"><img src="file:///unknown_3.png" alt="unknown_3.png"></span></p>
+<p class="p7"><span class="s1"># Clean up and Set aside required data sets</span></p>
+<p class="p7"><span class="s1">Environ &lt;- ls()</span></p>
+<p class="p7"><span class="s1">Environ &lt;- Environ[Environ != "FGL4_tidy"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_results"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_test"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "predictions_FGL4_train_CV" &amp; Environ != "Block_index"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train_CV"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "ROC_threshold_plots_tables" &amp; Environ != "FGL4_Pulsars_train"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_Pulsars_test"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "rf.full.FGL4"]</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1">rm(list = Environ)</span></p>
+<p class="p7"><span class="s1"># Save current workspace for subsequent steps</span></p>
+<p class="p7"><span class="s1">save.image()</span></p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; line-height: 26.0px; font: 24.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626"><span class="s1">Step 5. Outlyingness</span></h3>
+<p class="p7"><span class="s1"># Computation of AGN and PSR "outlyingness" using Random Forests (RF) # Load workspace from previous step</span></p>
+<p class="p7"><span class="s1">load(".RData")</span></p>
+<p class="p7"><span class="s1"># Load randomForest package</span></p>
+<p class="p7"><span class="s1">library(randomForest)<span class="Apple-converted-space"> </span></span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Set random seed</span></p>
+<p class="p7"><span class="s1">set.seed(1)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Compute RF predictions on entire FGL4 data</span></p>
+<p class="p7"><span class="s1">results &lt;- predict(rf.full.FGL4, newdata = FGL4_tidy, proximity = TRUE, type = "Prob")</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Use proximity matrix to compute PSR and AGN "outlyingness"</span></p>
+<p class="p7"><span class="s1">nobs &lt;- dim(FGL4_tidy)[1]<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">PSR_Out &lt;- numeric(nobs)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">AGN_Out &lt;- numeric(nobs)</span></p>
+<p class="p7"><span class="s1">for (i in 1:nobs ) {</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>PSR_proximities &lt;- results$proximity[FGL4_tidy$pulsarness == "Pulsar", i]<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>PSR_Out[i] &lt;- 1./sum(PSR_proximities^2)</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>AGN_proximities &lt;- results$proximity[FGL4_tidy$agnness == "AGN", i]<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>AGN_Out[i] &lt;- 1./sum(AGN_proximities^2)</span></p>
+<p class="p7"><span class="s1">}</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Normalize outlyingness</span></p>
+<p class="p7"><span class="s1">PSR_Out_norm &lt;- (PSR_Out - median(PSR_Out[FGL4_tidy$pulsarness == "Pulsar"])) /<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>mad(PSR_Out[FGL4_tidy$pulsarness=="Pulsar"])</span></p>
+<p class="p7"><span class="s1">AGN_Out_norm &lt;- (AGN_Out - median(AGN_Out[FGL4_tidy$agnness == "AGN"])) /<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">        </span>mad(AGN_Out[FGL4_tidy$agnness=="AGN"])</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Add outlyingness to FGL3_results data frame<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_results$PSR_Out &lt;- round(PSR_Out_norm, digits = 3)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_results$AGN_Out &lt;- round(AGN_Out_norm, digits = 3)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1">plot(FGL4_results$PSR_Out, FGL4_results$AGN_Out,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">     </span>xlim = c(0.1,900), ylim = c(0.1,3000),<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">     </span>xlab = "PSR Outlyingness",<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">     </span>ylab = "AGN Outlyingness",<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">     </span>log = "xy",</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">     </span>type = "n")</span></p>
+<p class="p9"><span class="s1">## Warning in xy.coords(x, y, xlabel, ylabel, log): 163 x values &lt;= 0 omitted from</span></p>
+<p class="p9"><span class="s1">## logarithmic plot</span></p>
+<p class="p9"><span class="s1">## Warning in xy.coords(x, y, xlabel, ylabel, log): 1869 y values &lt;= 0 omitted from</span></p>
+<p class="p9"><span class="s1">## logarithmic plot</span></p>
+<p class="p7"><span class="s1">legend(0.1, 6, c("AGN", "Pulsars", "Non-AGN/Non-Pulsars"), pch = c(17, 19, 1))</span></p>
+<p class="p7"><span class="s1">points(FGL4_results$PSR_Out[FGL4_tidy$agnness=="AGN"],<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">       </span>FGL4_results$AGN_Out[FGL4_tidy$agnness=="AGN"],<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">       </span>pch = 17)</span></p>
+<p class="p7"><span class="s1">points(FGL4_results$PSR_Out[FGL4_tidy$pulsarness=="Pulsar"],<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">       </span>FGL4_results$AGN_Out[FGL4_tidy$pulsarness=="Pulsar"],<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">       </span>pch = 19)</span></p>
+<p class="p7"><span class="s1">points(FGL4_results$PSR_Out[(FGL4_tidy$agnness!="AGN")&amp;(FGL4_tidy$pulsarness!="Pulsar")],<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">       </span>pch = 1)</span></p>
+<p class="p7"><span class="s1">abline(h = 10, lty = 2, lwd = 3)</span></p>
+<p class="p7"><span class="s1">abline(v = 10, lty = 2, lwd = 3)</span></p>
+<p class="p3"><span class="s1"><img src="file:///unknown_4.png" alt="unknown_4.png"></span></p>
+<p class="p7"><span class="s1"># Clean up and Set aside required data sets</span></p>
+<p class="p7"><span class="s1">Environ &lt;- ls()</span></p>
+<p class="p7"><span class="s1">Environ &lt;- Environ[Environ != "FGL4_tidy"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_results" &amp; Environ != "FGL4_test"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "predictions_FGL4_train_CV" &amp; Environ != "Block_index"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train_CV"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "ROC_threshold_plots_tables" &amp; Environ != "FGL4_Pulsars_train"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_Pulsars_test"]<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">rm(list = Environ)</span></p>
+<p class="p7"><span class="s1"># Save current workspace for subsequent steps</span></p>
+<p class="p7"><span class="s1">save.image()</span></p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; line-height: 26.0px; font: 24.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626"><span class="s1">Step 6. Pulsar (YNG vs MSP) classification using Boosted LR</span></h3>
+<p class="p7"><span class="s1"># Pulsar (YNG vs MSP) classification using Boosted LR # Load workspace from previous step</span></p>
+<p class="p7"><span class="s1">load(".RData")</span></p>
+<p class="p7"><span class="s1"># Load RWeka and pROC packages</span></p>
+<p class="p7"><span class="s1">library(RWeka)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">library(pROC)</span></p>
+<p class="p7"><span class="s1"># WOW(LogitBoost)</span></p>
+<p class="p7"><span class="s1">Model &lt;- LogitBoost(pulsarness ~., data = FGL4_Pulsars_train)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">summary(Model)</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## === Summary ===</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## Correctly Classified Instances <span class="Apple-converted-space">        </span>147 <span class="Apple-converted-space">              </span>91.3043 %</span></p>
+<p class="p9"><span class="s1">## Incorrectly Classified Instances<span class="Apple-converted-space">        </span>14<span class="Apple-converted-space">                </span>8.6957 %</span></p>
+<p class="p9"><span class="s1">## Kappa statistic<span class="Apple-converted-space">                          </span>0.8227</span></p>
+<p class="p9"><span class="s1">## Mean absolute error<span class="Apple-converted-space">                      </span>0.1418</span></p>
+<p class="p9"><span class="s1">## Root mean squared error<span class="Apple-converted-space">                  </span>0.2359</span></p>
+<p class="p9"><span class="s1">## Relative absolute error <span class="Apple-converted-space">                </span>28.681<span class="Apple-converted-space">  </span>%</span></p>
+<p class="p9"><span class="s1">## Root relative squared error <span class="Apple-converted-space">            </span>47.447<span class="Apple-converted-space">  </span>%</span></p>
+<p class="p9"><span class="s1">## Total Number of Instances<span class="Apple-converted-space">              </span>161<span class="Apple-converted-space">     </span></span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## === Confusion Matrix ===</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">  </span>a<span class="Apple-converted-space">  </span>b <span class="Apple-converted-space">  </span>&lt;-- classified as</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">  </span>62 10 |<span class="Apple-converted-space">  </span>a = MSP</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">  </span>4 85 |<span class="Apple-converted-space">  </span>b = YNG</span></p>
+<p class="p7"><span class="s1"># Model predictions</span></p>
+<p class="p7"><span class="s1">predictions_FGL4_Pulsars_train &lt;- predict(Model,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                          </span>newdata = FGL4_Pulsars_train, type = "probability")[, 2]</span></p>
+<p class="p7"><span class="s1">predictions_FGL4_Pulsars_test &lt;- predict(Model,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                         </span>newdata = FGL4_Pulsars_test, type = "probability")[, 2]</span></p>
+<p class="p7"><span class="s1"># Generate ROC plots and print contingency tables</span></p>
+<p class="p7"><span class="s1">Best_threshold_train &lt;- ROC_threshold_plots_tables(FGL4_Pulsars_train$pulsarness,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                                   </span>predictions_FGL4_Pulsars_train,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                                   </span>FGL4_Pulsars_test$pulsarness,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                                   </span>predictions_FGL4_Pulsars_test, cat1 = "YNG", cat2 = "MSP")</span></p>
+<p class="p3"><span class="s1"><img src="file:///unknown_5.png" alt="unknown_5.png"></span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                    </span>real_category</span></p>
+<p class="p9"><span class="s1">## Predict_class_train MSP YNG</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">                </span>MSP<span class="Apple-converted-space">  </span>69 <span class="Apple-converted-space">  </span>8</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">                </span>YNG <span class="Apple-converted-space">  </span>3<span class="Apple-converted-space">  </span>81</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">                  </span>real_category</span></p>
+<p class="p9"><span class="s1">## Predict_class_test MSP YNG</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                </span>MSP<span class="Apple-converted-space">  </span>30 <span class="Apple-converted-space">  </span>6</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                </span>YNG <span class="Apple-converted-space">  </span>5<span class="Apple-converted-space">  </span>28</span></p>
+<p class="p7"><span class="s1"># Add Boosted Logistic Regression Prediction probabilities to FGL3_results data frame<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_results$Blogistic_YNG_P &lt;- round(predict(Model,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                                </span>newdata = FGL4_tidy, type = "probability")[, 2], digits = 3)</span></p>
+<p class="p7"><span class="s1"># Add Boosted Logistic Regression Prediction category to FGL3_results data frame<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_results$Blogistic_YNG_Pred &lt;- ifelse(FGL4_results$Blogistic_YNG_P &gt; Best_threshold_train[1],</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                        </span>c("YNG"), c("MSP"))<span class="Apple-converted-space"> </span></span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Clean up and Set aside required data sets</span></p>
+<p class="p7"><span class="s1">Environ &lt;- ls()</span></p>
+<p class="p7"><span class="s1">Environ &lt;- Environ[Environ != "FGL4_tidy"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_results"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_test"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "predictions_FGL4_train_CV" &amp; Environ != "Block_index"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train_CV"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "ROC_threshold_plots_tables" &amp; Environ != "FGL4_Pulsars_train"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_Pulsars_test"]</span></p>
+<p class="p7"><span class="s1">rm(list = Environ)</span></p>
+<p class="p7"><span class="s1"># Save current workspace for subsequent steps</span></p>
+<p class="p7"><span class="s1">save.image()</span></p>
+<h3 style="margin: 0.0px 0.0px 10.0px 0.0px; line-height: 26.0px; font: 24.0px 'Helvetica Neue'; color: #262626; -webkit-text-stroke: #262626"><span class="s1">Step 7. Pulsar (YNG vs MSP) classification using Random Forests # Pulsar (YNG vs MSP) classification using Random Forests (RF)</span></h3>
+<p class="p7"><span class="s1"># Load workspace from previous step</span></p>
+<p class="p7"><span class="s1">load(".RData")</span></p>
+<p class="p7"><span class="s1"># Load randomForest and pROC packages</span></p>
+<p class="p7"><span class="s1">library(randomForest)<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">library(pROC)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Set random seed</span></p>
+<p class="p7"><span class="s1">set.seed(1)<span class="Apple-converted-space"> </span></span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># Full model</span></p>
+<p class="p7"><span class="s1">rf.P &lt;- randomForest(pulsarness ~., data = FGL4_Pulsars_train, importance = TRUE)</span></p>
+<p class="p8"><span class="s1"></span><br></p>
+<p class="p7"><span class="s1"># The importance of each variable</span></p>
+<p class="p7"><span class="s1">importance(rf.P)<span class="Apple-converted-space"> </span></span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">                          </span>MSP<span class="Apple-converted-space">        </span>YNG MeanDecreaseAccuracy MeanDecreaseGini</span></p>
+<p class="p9"><span class="s1">## GLAT<span class="Apple-converted-space">                </span>4.6675858 15.5673073 <span class="Apple-converted-space">          </span>13.7113023 <span class="Apple-converted-space">        </span>7.858857</span></p>
+<p class="p9"><span class="s1">## PL_Index <span class="Apple-converted-space">          </span>12.8582143 10.9930425 <span class="Apple-converted-space">          </span>15.6017989<span class="Apple-converted-space">        </span>10.143503</span></p>
+<p class="p9"><span class="s1">## LP_Index <span class="Apple-converted-space">          </span>10.8815154 10.6942344 <span class="Apple-converted-space">          </span>14.4339726 <span class="Apple-converted-space">        </span>8.700544</span></p>
+<p class="p9"><span class="s1">## PLEC_Index<span class="Apple-converted-space">          </span>0.2955325<span class="Apple-converted-space">  </span>0.4808069<span class="Apple-converted-space">            </span>0.5961986 <span class="Apple-converted-space">        </span>1.900054</span></p>
+<p class="p9"><span class="s1">## Variability_Index <span class="Apple-converted-space">  </span>0.1549175<span class="Apple-converted-space">  </span>1.1527346<span class="Apple-converted-space">            </span>1.1385884 <span class="Apple-converted-space">        </span>2.019699</span></p>
+<p class="p9"><span class="s1">## Conf_95_PosAng <span class="Apple-converted-space">    </span>-0.6266937<span class="Apple-converted-space">  </span>0.5126596<span class="Apple-converted-space">            </span>0.1198631 <span class="Apple-converted-space">        </span>2.329427</span></p>
+<p class="p9"><span class="s1">## PL_Flux_Density <span class="Apple-converted-space">    </span>7.2653839<span class="Apple-converted-space">  </span>6.3450925<span class="Apple-converted-space">            </span>9.1043011 <span class="Apple-converted-space">        </span>3.466217</span></p>
+<p class="p9"><span class="s1">## LP_Flux_Density <span class="Apple-converted-space">    </span>5.9199619<span class="Apple-converted-space">  </span>5.2869891<span class="Apple-converted-space">            </span>7.7981489 <span class="Apple-converted-space">        </span>3.516277</span></p>
+<p class="p9"><span class="s1">## PLEC_Flux_Density <span class="Apple-converted-space">  </span>7.4558367<span class="Apple-converted-space">  </span>5.5164104<span class="Apple-converted-space">            </span>9.2804414 <span class="Apple-converted-space">        </span>3.803316</span></p>
+<p class="p9"><span class="s1">## Unc_Energy_Flux100 22.3221039 21.5298042 <span class="Apple-converted-space">          </span>27.7949883<span class="Apple-converted-space">        </span>17.864244</span></p>
+<p class="p9"><span class="s1">## LP_SigCurv<span class="Apple-converted-space">          </span>3.7424154<span class="Apple-converted-space">  </span>5.0186923<span class="Apple-converted-space">            </span>6.8199698 <span class="Apple-converted-space">        </span>3.073394</span></p>
+<p class="p9"><span class="s1">## PLEC_SigCurv<span class="Apple-converted-space">        </span>4.8982095<span class="Apple-converted-space">  </span>3.5727087<span class="Apple-converted-space">            </span>6.0913094 <span class="Apple-converted-space">        </span>2.725900</span></p>
+<p class="p9"><span class="s1">## hr12<span class="Apple-converted-space">                </span>3.0378142<span class="Apple-converted-space">  </span>1.3344895<span class="Apple-converted-space">            </span>2.8396665 <span class="Apple-converted-space">        </span>2.030557</span></p>
+<p class="p9"><span class="s1">## hr23<span class="Apple-converted-space">                </span>4.9612912 -0.1258733<span class="Apple-converted-space">            </span>3.7473415 <span class="Apple-converted-space">        </span>2.617644</span></p>
+<p class="p9"><span class="s1">## hr34<span class="Apple-converted-space">                </span>2.1812047<span class="Apple-converted-space">  </span>3.8565339<span class="Apple-converted-space">            </span>4.6494418 <span class="Apple-converted-space">        </span>2.924810</span></p>
+<p class="p9"><span class="s1">## hr45 <span class="Apple-converted-space">              </span>-1.8207065<span class="Apple-converted-space">  </span>0.9289847 <span class="Apple-converted-space">          </span>-0.4286206 <span class="Apple-converted-space">        </span>2.111738</span></p>
+<p class="p9"><span class="s1">## hr56<span class="Apple-converted-space">                </span>1.4840631<span class="Apple-converted-space">  </span>0.1716582<span class="Apple-converted-space">            </span>1.1534382 <span class="Apple-converted-space">        </span>2.006045</span></p>
+<p class="p7"><span class="s1">varImpPlot(rf.P)</span></p>
+<p class="p3"><span class="s1"><img src="file:///unknown_6.png" alt="unknown_6.png"></span></p>
+<p class="p7"><span class="s1"># Model predictions</span></p>
+<p class="p7"><span class="s1">predictions_FGL4_Pulsars_train &lt;- predict(rf.P,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                          </span>newdata = FGL4_Pulsars_train, type = "Prob")[,2 ]</span></p>
+<p class="p7"><span class="s1">predictions_FGL4_Pulsars_test &lt;- predict(rf.P,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                         </span>newdata = FGL4_Pulsars_test, type = "Prob")[,2 ]</span></p>
+<p class="p7"><span class="s1"># Generate ROC plots and print contingency tables</span></p>
+<p class="p7"><span class="s1">Best_threshold_train &lt;- ROC_threshold_plots_tables(FGL4_Pulsars_train$pulsarness,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                                   </span>predictions_FGL4_Pulsars_train,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                                   </span>FGL4_Pulsars_test$pulsarness,<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                                   </span>predictions_FGL4_Pulsars_test, cat1 = "YNG", cat2 = "MSP")</span></p>
+<p class="p3"><span class="s1"><img src="file:///unknown_7.png" alt="unknown_7.png"></span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                    </span>real_category</span></p>
+<p class="p9"><span class="s1">## Predict_class_train MSP YNG</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">                </span>MSP<span class="Apple-converted-space">  </span>72 <span class="Apple-converted-space">  </span>0</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">                </span>YNG <span class="Apple-converted-space">  </span>0<span class="Apple-converted-space">  </span>89</span></p>
+<p class="p9"><span class="s1">## <span class="Apple-converted-space">                  </span>real_category</span></p>
+<p class="p9"><span class="s1">## Predict_class_test MSP YNG</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                </span>MSP<span class="Apple-converted-space">  </span>29 <span class="Apple-converted-space">  </span>2</span></p>
+<p class="p9"><span class="s1">##<span class="Apple-converted-space">                </span>YNG <span class="Apple-converted-space">  </span>6<span class="Apple-converted-space">  </span>32</span></p>
+<p class="p7"><span class="s1"># Add RF Prediction probabilities to FGL3_results data frame<span class="Apple-converted-space"> </span></span></p>
+<p class="p7"><span class="s1">FGL4_results$RF_YNG_P &lt;- round(predict(rf.P,</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                </span>newdata = FGL4_tidy, type = "Prob")[,2 ], digits = 3)</span></p>
+<p class="p7"><span class="s1"># Add RF Prediction category to FGL3_results data frame</span></p>
+<p class="p7"><span class="s1">FGL4_results$RF_YNG_Pred &lt;- ifelse(FGL4_results$RF_YNG_P &gt; Best_threshold_train[1],</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                                   </span>c("YNG"), c("MSP"))</span></p>
+<p class="p7"><span class="s1"># Plot Importance</span></p>
+<p class="p7"><span class="s1">par(mfrow = c(1,1))</span></p>
+<p class="p7"><span class="s1">varImpPlot(rf.P, pch = 19, type = 1, main = "")</span></p>
+<p class="p3"><span class="s1"><img src="file:///unknown_8.png" alt="unknown_8.png"></span></p>
+<p class="p7"><span class="s1"># Clean up and Set aside required data sets</span></p>
+<p class="p7"><span class="s1">Environ &lt;- ls()</span></p>
+<p class="p7"><span class="s1">Environ &lt;- Environ[Environ != "FGL4_tidy"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_results"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_test"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "predictions_FGL4_train_CV" &amp; Environ != "Block_index"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_train_CV"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "ROC_threshold_plots_tables" &amp; Environ != "FGL4_Pulsars_train"</span></p>
+<p class="p7"><span class="s1"><span class="Apple-converted-space">                   </span>&amp; Environ != "FGL4_Pulsars_test"]</span></p>
+<p class="p7"><span class="s1">rm(list = Environ)</span></p>
+<p class="p7"><span class="s1"># Save current workspace for subsequent steps</span></p>
+<p class="p7"><span class="s1">save.image()</span></p>
+<p class="p7"><span class="s1"># Write results to a file</span></p>
+<p class="p7"><span class="s1">save(FGL4_results, file = "FGL4_results.rdata", compress = "xz")</span></p>
+</body>
+</html>
