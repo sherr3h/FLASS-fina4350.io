@@ -1659,7 +1659,7 @@ sedflux &lt;- function(photon_flux, alpha, Elo, Ehi) {
 
 # Subselect small number of variables from those available in 4FGL
 FGL4_01 &lt;- select(FGL4,
-                  Source_Name, RAJ2000, DEJ2000, GLON, GLAT,
+                  Source_Name, RAJ2000, DEJ2000, GLON, GLAT, SpectrumType,
                   PL_Index, LP_Index, PLEC_Index, #Spectral_Index, 
                   Variability_Index, 
                   Conf_68_SemiMajor, Conf_68_SemiMinor, Conf_68_PosAng, 
