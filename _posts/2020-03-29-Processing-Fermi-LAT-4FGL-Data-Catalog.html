@@ -1756,7 +1756,7 @@ save(FGL4_tidy, file = &quot;FGL4_tidy.rData&quot;, compress = &quot;xz&quot;)
 FGL4_tidy_for_FGL3 &lt;- select(FGL4_tidy, -GLAT) %&gt;%
   mutate(Source_Name = substr(Source_Name, 6, 18), 
          FGL3_Source_name = trimws(substr(ASSOC_FGL,7,18)),
-         class = case_when(agnness == &quot;AGN&quot;~&quot;AGN&quot;, pulsarness == &quot;PSR&quot;~&quot;PSR&quot;, 
+         class = case_when(agnness == &quot;AGN&quot;~&quot;AGN&quot;, pulsarness == &quot;Pulsar&quot;~&quot;PSR&quot;, 
                            (agnness == &quot;Non-AGN&quot;)&amp;(pulsarness == &quot;Non-Pulsar&quot;)~&quot;Other&quot;),
          class = factor(class, levels = c(&quot;AGN&quot;, &quot;PSR&quot;,&quot;Other&quot;))
   )
