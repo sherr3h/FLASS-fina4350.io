@@ -1640,13 +1640,25 @@ summary {
 </div>
 
 
+<div id="download-rawprocessed-r-data-and-csv-files-in-this-script" class="section level3">
+<h3>Download Raw/Processed R Data and CSV Files in This Script</h3>
+<ul>
+<li>‘FGL4.rData’ <a href="https://github.com/sherr3h/sherr3h.github.io/blob/master/data/FGL4.rdata">Download here</a>.</li>
+<li>‘pulsars.rData’ <a href="https://github.com/sherr3h/sherr3h.github.io/blob/master/data/pulsars.rdata">Download here</a>. (This and the above are included in the updated fermicatsR package).</li>
+<li>‘FGL4_Pulsars_full.rData’ <a href="https://github.com/sherr3h/sherr3h.github.io/blob/master/data/FGL4_Pulsars_full.rData">Download here</a>.</li>
+<li>‘FGL4_tidy.rData’ <a href="https://github.com/sherr3h/sherr3h.github.io/blob/master/data/FGL4_tidy.rData">Download here</a>.</li>
+<li>‘FGL4_results.rData’ <a href="https://github.com/sherr3h/sherr3h.github.io/blob/master/data/FGL4_results.rData">Download here</a>.</li>
+<li>‘FGL4_results.csv’ <a href="https://github.com/sherr3h/sherr3h.github.io/blob/master/data/FGL4_results.csv">Download here</a>.</li>
+</ul>
+</div>
 <div id="data-source" class="section level3">
 <h3>Data Source</h3>
 <p>“FGL4.rData” are downloaded from Fermi LAT data products. “FGL4_tidy_for_FGL3.rData” are processed 4FGL data catalog. (<a href="https://fermi.gsfc.nasa.gov/ssc/data/access/" class="uri">https://fermi.gsfc.nasa.gov/ssc/data/access/</a>)</p>
 </div>
-<div id="step-0-processing-4fgl-catalog" class="section level3">
-<h3>Step 0: Processing 4FGL catalog</h3>
-<pre class="r"><code>library(dplyr)
+<div id="step-0a-processing-4fgl-catalog" class="section level3">
+<h3>Step 0a: Processing 4FGL catalog</h3>
+<pre class="r"><code>library(fermicatsR)
+library(dplyr)
 library(tidyverse)
 library(devtools)
 library(data.table)
@@ -1774,7 +1786,7 @@ FGL4_03 &lt;- select(FGL4_02,
                   )
 
 # Take log of variables with highly skewed distributions (removing zeroes to avoid -Inf) 
-FGL4_04 &lt;- filter(FGL4_03, FGL4_03$LP_SigCurv != 0 &amp; FGL4_03$PLEC_SigCurv != 0) %&gt;%   #5065-&gt;5010
+FGL4_04 &lt;- filter(FGL4_03, FGL4_03$LP_SigCurv != 0 &amp; FGL4_03$PLEC_SigCurv != 0) %&gt;%   # 5065-&gt;5010
   mutate(Variability_Index = log(Variability_Index), Pivot_Energy = log(Pivot_Energy),
          PL_Flux_Density = log(PL_Flux_Density),      
          LP_Flux_Density = log(LP_Flux_Density),     
@@ -1843,7 +1855,17 @@ setDT(melt(FGL4_04_cor))[Var1 != Var2, .SD[which.max(value)], keyby=Var1]</code>
 ## 24:                hr56      Pivot_Energy 0.19825096
 ## 25:              Signif             Npred 0.81226463
 ##                    Var1              Var2      value</code></pre>
-<pre class="r"><code>FGL4_tidy_for_FGL3 &lt;- select(FGL4_tidy, -GLAT) %&gt;%
+<pre class="r"><code>FGL4_tidy_for_FGL3 &lt;- select(FGL4_03, -Unc_LP_Flux_Density, -Unc_PLEC_Flux_Density, -Signif_Peak, -Flux_Peak) %&gt;%
+    mutate(agnness = factor(CLASS1 == &quot;BCU&quot; | CLASS1 == &quot;bcu&quot; 
+                          |CLASS1 == &quot;BLL&quot; | CLASS1 == &quot;bll&quot;
+                          |CLASS1 == &quot;FSRQ&quot;| CLASS1 == &quot;fsrq&quot; 
+                          |CLASS1 == &quot;rdg&quot; | CLASS1 == &quot;RDG&quot; 
+                          |CLASS1 == &quot;nlsy1&quot; | CLASS1 == &quot;NLSY1&quot; 
+                          |CLASS1 == &quot;agn&quot; | CLASS1 == &quot;ssrq&quot; |CLASS1 == &quot;sey&quot; 
+                          |CLASS2 == &quot;agn&quot; | CLASS2 == &quot;sey&quot;,
+                          labels = c(&quot;Non-AGN&quot;, &quot;AGN&quot;)), 
+         pulsarness = factor(CLASS1 == &quot;PSR&quot; | CLASS1 == &quot;psr&quot; | CLASS2 == &quot;psr&quot;,
+                          labels = c(&quot;Non-Pulsar&quot;, &quot;Pulsar&quot;))) %&gt;%
   mutate(Source_Name = substr(Source_Name, 6, 18), 
          FGL3_Source_name = trimws(substr(ASSOC_FGL,7,18)),
          class = case_when(agnness == &quot;AGN&quot;~&quot;AGN&quot;, pulsarness == &quot;Pulsar&quot;~&quot;PSR&quot;, 
@@ -1876,6 +1898,41 @@ FGL4_results &lt;- select(FGL4_05, Source_Name, ASSOC_FGL,
   mutate(PLEC_Flux_Density = format(exp(PLEC_Flux_Density), scientific = TRUE, digits = 3)) 
 
 save(FGL4_results, file = &quot;FGL4_results.rData&quot;, compress = &quot;xz&quot;)</code></pre>
+</div>
+<div id="step-0b-processing-4fgl-catalog-and-pulsar-data-sets-for-yng-vs-msp-classification" class="section level3">
+<h3>Step 0b: Processing 4FGL catalog and pulsar data sets for YNG vs MSP classification</h3>
+<pre class="r"><code>load(&quot;fermicatsR/data/pulsars.rData&quot;)
+pulsars_long &lt;- mutate(pulsars, PSR_coords = substr(PSR, 6, 12)) 
+FGL4_pulsars &lt;- FGL4_tidy %&gt;%
+        filter (pulsarness == &quot;Pulsar&quot;) %&gt;% mutate(ASSOC1 = as.character(ASSOC1))
+a &lt;- strsplit(FGL4_pulsars$ASSOC1, &quot;PSR J&quot;) 
+b &lt;- character(nrow(FGL4_pulsars))
+
+for (i in 1:nrow(FGL4_pulsars)) { 
+        b[i] &lt;- gsub(&quot; &quot;, &quot;&quot;, a[[i]][2])
+}
+
+FGL4_pulsars$ASSOC1_code &lt;- b
+FGL4_pulsars &lt;- mutate(FGL4_pulsars, ASSOC1_code = substr(ASSOC1_code, 1, 7)) 
+bothFGL4andpulsars &lt;- inner_join(pulsars_long, FGL4_pulsars,
+                                 by = c(&quot;PSR_coords&quot; = &quot;ASSOC1_code&quot;))  # 230 obs
+
+bothFGL4andpulsars &lt;- bothFGL4andpulsars[ , !(names(bothFGL4andpulsars) %in% c(&quot;date_public&quot;))]
+
+FGL4_Pulsars_full &lt;- mutate(bothFGL4andpulsars,
+                       pulsarness = factor(P_ms &gt;= 10, labels = c(&quot;MSP&quot;, &quot;YNG&quot;))) 
+save(FGL4_Pulsars_full, file = &quot;FGL4_Pulsars_full.rData&quot;, compress = &quot;xz&quot;)
+
+FGL4_Pulsars &lt;- select (FGL4_Pulsars_full, -P_ms, -Codes, -RAJ_deg, -DECJ_deg, -Refs,
+                               -CLASS1, -ASSOC1, -CLASS2, -ASSOC2,
+                -Source_Name, -ASSOC_FGL, -PSR, -PSR_coords, -Edot, -agnness)
+
+save(FGL4_Pulsars_full, file = &quot;FGL4_Pulsars_full.rData&quot;, compress = &quot;xz&quot;)
+
+FGL4_Pulsars &lt;- select (FGL4_Pulsars_full, -P_ms, -Codes, -RAJ_deg, -DECJ_deg, -Refs,
+                               -CLASS1, -ASSOC1, -CLASS2, -ASSOC2,
+                -Source_Name, -ASSOC_FGL, -PSR, -PSR_coords, -Edot, -agnness)
+save(FGL4_Pulsars, file = &quot;FGL4_Pulsars.rData&quot;, compress = &quot;xz&quot;)</code></pre>
 <pre class="r"><code>library(rmarkdown)
 paged_table(FGL4_results, options = list(rows.print = 20))</code></pre>
 <div data-pagedtable="false">
