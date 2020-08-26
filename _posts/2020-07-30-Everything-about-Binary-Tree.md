@@ -14,10 +14,10 @@ I'm trying to sum up all sorts of stuffs that you can do with a binary tree.
 ### Initialization
 
 ```python
-class Node:
-    def __init__(self,data):
-        self.right=self.left=None
-        self.data = data
+class Node:
+    def __init__(self,data):
+        self.right = self.left=None
+        self.data = data
 
 ```
 
@@ -33,8 +33,8 @@ class Solution:
                 root.left=cur
             else:
                 cur=self.insert(root.right,data)
-                root.right=cur
-        return root
+                root.right=cur
+        return root
 
 ```
 
