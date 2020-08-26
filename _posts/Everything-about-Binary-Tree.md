@@ -2,8 +2,7 @@
 layout: post
 title: Everything about Binary Trees
 gh-repo: sherr3h/sherr3h.github.io
-gh-badge: [star, fork, follow]
-tags: [DataStructure, Python]
+tags: [Data Structure, Python]
 comments: true
 ---
 I'm trying to sum up all sorts of stuffs that you can do with a binary tree.
