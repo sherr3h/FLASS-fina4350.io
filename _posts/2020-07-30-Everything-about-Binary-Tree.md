@@ -122,7 +122,7 @@ class Solution:
 
 ```python
 # in class Solution:
-def verticalTraversal(self, root: Node) -> List[List[int]]:
+    def verticalTraversal(self, root: Node) -> List[List[int]]:
         from collections import defaultdict
         dic = defaultdict(list)
         self.min_x = 10000
