@@ -1,10 +1,10 @@
 # --- General options --- #
 
 # Name of website
-title: Untitled SH Project
+title: Sherry He
 
 # Short description of your site
-description: I code.
+description: Untitled SH Project.
 
 # --- Local development options ---
 # If your website is hosted locally rather than on GitHub, then you need to uncomment the next two parameters to set the url and baseurl
