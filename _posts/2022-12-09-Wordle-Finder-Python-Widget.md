@@ -10,7 +10,9 @@ I created a Python widget to find 5-letter word candidates for the New York Time
 ![WordleRule](/img/Wordle.png)
 
 
-I tried to put the widget online. Unfortunately, it's not easy to host a live jupyter notebook to display the widget on Github. Tried using Binder, but it's really slow. So here's the Python code for anyone interested. Copy them into a jupyter notebook and play Wordle with fewer guesses!
+I tried to put the widget online. Unfortunately, it's not easy to host a live jupyter notebook to display the widget on Github. Tried using Binder, but it's really slow. So here's the Python code for anyone interested. 
+
+Copy them into a jupyter notebook and play Wordle with fewer guesses!
 
 ### Data Source
 - [sgb-words](https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt), a 5,000 5-letter common words corpus on Stanford CS website
@@ -62,13 +64,12 @@ class Wordle():
                 pattern = re.compile("^.{"+str(i)+"}"+greens[i][0].lower()+".*")
                 self.possibleWords = list(filter(pattern.match, self.possibleWords))
                 self.confirmed.add(i)
-                #print(possibleWords)
 
     def matchYellow(self, yellows):
         for i in yellows.keys():
             if yellows[i] and i not in self.confirmed:
                 for j in range(len(yellows[i])):
-                    pattern = re.compile("\w*"+yellows[i][j].lower()+"\w*")# or (".*"+yellows[i][0]+".*")
+                    pattern = re.compile("\w*"+yellows[i][j].lower()+"\w*")
                     self.possibleWords = list(filter(pattern.match, self.possibleWords))
                     pattern = re.compile("^.{"+str(i)+"}[^"+yellows[i][j].lower()+"].*")
                     self.possibleWords = list(filter(pattern.match, self.possibleWords))
@@ -130,7 +131,7 @@ yellows = defaultdict(list)
 guess = Wordle()
 ```
 
-### Setting up two buttons, Submit and Clear 
+### Setting up two buttons - Submit and Clear 
 ```python
 def onSubmitButtonClicked(b):
     for i in range(5):
@@ -191,5 +192,8 @@ sub = GridBox(children=[green_label,
        )
 display(sub)
 ```
+
+As you get more information, click the update button to narrow down candidate words. Bu the way, I find that a good starting word is very important for Wordle. What's your starting word? :)
+
 
 ![WordleWidget](/img/WordleFinder.png)
