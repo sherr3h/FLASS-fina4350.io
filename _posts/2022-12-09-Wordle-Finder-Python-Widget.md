@@ -12,9 +12,10 @@ I created a Python widget to find 5-letter word candidates for the New York Time
 
 I tried to put the widget online. Unfortunately, it's not easy to host a live jupyter notebook to display the widget on Github. Tried using Binder, but it's really slow. So here's the Python code for anyone interested. 
 
+
 Copy them into a jupyter notebook and play Wordle with fewer guesses!
 
-### Data Source
+### Data source
 - [sgb-words](https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt), a 5,000 5-letter common words corpus on Stanford CS website
 - [Wordle Valid Words](https://www.kaggle.com/datasets/bcruise/wordle-valid-words), a 10,000 words corpus on Kaggle
 
@@ -33,7 +34,7 @@ import ipywidgets as widgets
 from ipywidgets import Layout, Button, Box, Textarea, Label, GridBox, ButtonStyle
 ```
 
-### The Wordle Finder Class
+### The Wordle Finder class
 ```python
 class Wordle():
     def __init__(self):
@@ -51,7 +52,6 @@ class Wordle():
         words2 = list(pd.read_csv(url2)["word"])
         self.possibleWords = list(set(words + words2))
         self.possibleWords.sort()
-        
 
     def updateGuess(self, greens, yellows, greys):
         self.matchGreen(greens)
