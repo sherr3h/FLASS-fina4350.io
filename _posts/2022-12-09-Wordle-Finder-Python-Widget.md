@@ -193,7 +193,11 @@ sub = GridBox(children=[green_label,
 display(sub)
 ```
 
-As you get more information, click the update button to narrow down candidate words. Bu the way, I find that a good starting word is very important for Wordle. What's your starting word? :)
-
+As you get more information, click the update button to narrow down candidate words. 
 
 ![WordleWidget](/img/WordleFinder.png)
+
+### About Wordle strategy
+I like to play with the hard mode (i.e. any revealed hints must be used in subsequent guesses). My strategy is to try out every vowel and the most frequent  consonants in my first two guesses (if only I can come up with such words). I also find that a good starting word is very important. Without this widget, the mode of my guess distribution is 4 guesses to get the correct answer. With this widget I can find the correct word within 3 guesses more often. By the way, what's your starting word?
+
+
