@@ -5,14 +5,16 @@ gh-repo: sherr3h/sherr3h.github.io
 tags: [Wordle, game, Python]
 comments: true
 ---
-I created a Python widget to find 5-letter word candidates for the New York Times game [Wordle](https://www.nytimes.com/games/wordle/index.html), using simple regular expressions and ipywidgets. 
+I created a Python widget to find 5-letter word candidates for the New York Times game [Wordle](https://www.nytimes.com/games/wordle/index.html), using simple regular expressions and ipywidgets. Wordle is a 5-letter word guessing game:
+
+![WordleRule](/img/Wordle.png)
+
 
 I tried to put the widget online. Unfortunately, it's not easy to host a live jupyter notebook to display the widget on Github. Tried using Binder, but it's really slow. So here's the Python code for anyone interested. Copy them into a jupyter notebook and play Wordle with fewer guesses!
 
 ### Data Source
 - [sgb-words](https://www-cs-faculty.stanford.edu/~knuth/sgb-words.txt), a 5,000 5-letter common words corpus on Stanford CS website
 - [Wordle Valid Words](https://www.kaggle.com/datasets/bcruise/wordle-valid-words), a 10,000 words corpus on Kaggle
-
 
 
 ### Dependencies
@@ -186,10 +188,8 @@ sub = GridBox(children=[green_label,
             "header header header header header"
             "clear clear clear clear clear"
             ''')
-        #"main main . sidebar "
-            #"footer footer footer footer"
        )
 display(sub)
 ```
 
-
+![WordleWidget](/img/WordleFinder.png)
