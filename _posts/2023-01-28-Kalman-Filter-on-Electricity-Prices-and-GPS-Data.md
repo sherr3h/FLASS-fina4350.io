@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Kalman Filter on Electricity Prices and GPS Data
+title: Kalman Filter on Simulated GPS Data
 gh-repo: sherr3h/sherr3h.github.io
 tags: [Kalman Filter, Statistics, Time Series]
 comments: true
@@ -9,7 +9,7 @@ comments: true
 
 Kalman filter is a Bayesian method to update and improve parameter estimates from observations with uncertainty. It can be applied to time series formulated as a Linear Gaussian State Space Model. The kalman filter method was used by NASA in the Apollo Project to estimate trajectories of the manned spacecraft landing on the Moon and back (wow!). 
 
-In this post, I will apply Kalman filter to two time series datasets: (1) simulated GPS locations, and (2) an electricity price dataset.
+In this and the next post, I will apply Kalman filter to two time series datasets: (1) simulated GPS locations (in honour of the Apollo 11 Lunar Module), and (2) a power market electricity price dataset.
 
 ## Problem Formulation
 
@@ -42,8 +42,8 @@ Using conclusions from the marginal and conditional distributions of multivariat
     <p>
     \begin{align}
       K_{t+1} &amp;= \Sigma_{t+1|t}H_{t+1}^T \left(H_{t+1} \Sigma_{t+1|t}H_{t+1}^T + R_{t+1}  \right)^{-1}, \text{ the Kalman gain} \\
-      \mu_{t+1|t+1} &amp;= \mu_{t+1|t} + K_{t+1} \left(y_{t+1} - H_{t+1}\mu_{t+1|t} \right)  \\
-                    &amp; =\left(I -  K_{t+1}H_{t+1}\right)\mu_{t+1|t} + K_{t+1} y_{t+1}, \text{ the Innovation} \\
+      \mu_{t+1|t+1} &amp;= \mu_{t+1|t} + K_{t+1} \left(Y_{t+1} - H_{t+1}\mu_{t+1|t} \right)  \\
+                    &amp; =\left(I -  K_{t+1}H_{t+1}\right)\mu_{t+1|t} + K_{t+1} Y_{t+1}, \text{ the Innovation} \\
       \Sigma_{t+1|t+1} &amp; = \left(I -  K_{t+1}H_{t+1}\right) \Sigma_{t+1|t} 
        \end{align}
     </p>
@@ -87,7 +87,7 @@ Y &amp;= \begin{bmatrix}x_{obs} & y_{obs}\end{bmatrix}^T
  \[
 A_t = \begin{bmatrix}
     1& \delta t& \frac{\delta t^2}{2}& 0& 0& 0\\
-    0& 1& dt& 0& 0& 0\\
+    0& 1& \delta t& 0& 0& 0\\
     0& 0& 1& 0& 0& 0\\
     0& 0& 0& 1& \delta t& \frac{\delta t^2}{2}\\
     0& 0& 0& 0& 1& \delta t\\
@@ -126,7 +126,7 @@ and the measurement error covariance matrix $$R$$ is
 
 <p>
  \[
-    H = \begin{bmatrix}
+    R = \begin{bmatrix}
 \sigma_{GPS}&0\\
 0&\sigma_{GPS}\\
 \end{bmatrix}
@@ -150,7 +150,4 @@ X_0 &amp;= \begin{bmatrix}2 & 0& 2&  0&  3& 0\end{bmatrix}^T \\
 The Kalman Filter algorithm updates the car's predicted position as each observation comes in, which effectiveliy reduces noises and smoothes the raw GPS observations.
 
  <img src="/img/simulate_kf.png" width="600" >
-    
-    
-## Power Market Electricity Price Data 
 
