@@ -48,7 +48,7 @@ Using conclusions from the marginal and conditional distributions of multivariat
        \end{align}
     </p>
    
-### Simulated Race Car Location Data 
+## Simulated Race Car Location Data 
 
 Suppose a race car is on a track with the following equations:
 
@@ -56,13 +56,97 @@ $$x=2\cos(t), y=\sin(3t), t\ge 0$$
 
  <img src="/img/simulate_motion.jpg" width="700" >
 
-Suppose unfortunately the car jerks when accelerating (such that the acceleration is not constant), we consider the third order derivatives of the car's position as Gaussian variables. The state and observation vectors contain up to second order derivatives of the position (note $$x,y$$ are position on the 2D plane, and $$X, Y$$ are the hidden state and observation of the car's GPS position):
+Suppose unfortunately the car jerks when accelerating (such that the acceleration is not constant), we consider the third order derivatives of the car's position as Gaussian variables $$a_x \sim N(0, \sigma_x^2), a_y \sim N(0, \sigma_y^2)$$.
 
-<p>
-\begin{align}
-X &amp;= (x \; \dot{x} \; \ddot{x} \; y \; \dot{y} \; \ddot{y})^T \\
-Y &amp;= (x_{obs} \; y_{obs})^T
-\end{align}
-</p>
 
+By the Newton's law of motion,
+    <p>
+    \begin{align}
+x(t+ \delta t) &amp;=x(t) + \delta t \cdot \dot{x}(t) + \frac{\delta t^2}{2} \ddot{x}(t)+ \frac{\delta t^3}{6} a_x
+
+ \dot{x}(t+ \delta t) &amp;= \dot{x}(t) + \delta t \cdot \ddot{x}(t) +  \frac{\delta t^2}{2} a_x
+
+\ddot{x}(t+ \delta t) &amp;=  \ddot{x}(t) + \delta t \cdot a_x
+       \end{align}
+    </p>
+The dynamics are similar for dimension $y$.
+
+Let the car carry a GPS device to observe its current physical position, with measurement error following $$\epsilon \sim N\left(0, \sigma_{GPS}^2 \right)$$ on both dimensions. The observations might look like this:
+
+ <img src="/img/simulate_gps.jpg" width="350" >
+
+Applying Newton dynamics to Kalman Filter, the state and observation vectors contain up to second order derivatives of the position (note $$x,y$$ are position on the 2D plane, and $$X, Y$$ are the hidden state and observation of the car's GPS position):
+
+    <p>
+    \begin{align}
+X &amp;= \begin{bmatrix}x & \dot{x} & \ddot{x} & y & \dot{y} & \ddot{y}\end{bmatrix}^T \\
+Y &amp;= \begin{bmatrix}x_{obs} & y_{obs}\end{bmatrix}^T \\
+
+
+A_t &amp;= \begin{bmatrix}
+    1& \delta t& \frac{\delta t^2}{2}& 0& 0& 0\\
+    0& 1& dt& 0& 0& 0\\
+    0& 0& 1& 0& 0& 0\\
+    0& 0& 0& 1& \delta t& \frac{\delta t^2}{2}\\
+    0& 0& 0& 0& 1& \delta t\\
+    0& 0& 0& 0& 0& 1\\
+\end{bmatrix}
+       \end{align}
+    </p>
+
+
+The process error matrix covariance $$Q$$ is 
+    <p>
+    \begin{align}
+Q&amp;=Var(\begin{bmatrix}\frac{\delta t^3}{6}a_x & \frac{\delta t^2}{2} a_x & \delta t \cdot a_x & \frac{\delta t^3}{6}a_y & \frac{\delta t^2}{2} a_y & \delta t \cdot a_y\end{bmatrix}^T)\\
+ 
+ &amp;= \sigma_x^2 uu^T + \sigma_y^2 vv^T 
+       \end{align}
+    </p>
+
+
+where $$u = \begin{bmatrix}\frac{\delta t^3}{6}a_x & \frac{\delta t^2}{2} a_x &\delta t \cdot a_x &0&0&0\end{bmatrix}^T, v = \begin{bmatrix}0&0&0& \frac{\delta t^3}{6}a_y & \frac{\delta t^2}{2} a_y &\delta t \cdot a_y\end{bmatrix}^T$$
+
+
+The GPS observes hidden states directly, so
+
+    <p>
+    \begin{align}
+H = \begin{bmatrix}
+1&0&0&0&0&0\\
+0&0&0&1&0&0\\
+\end{bmatrix}
+       \end{align}
+    </p>
+    
+and the measurement error covariance matrix $$R$$ is 
+
+    <p>
+    \begin{align}
+    H = \begin{bmatrix}
+\sigma_{GPS}&0\\
+0&\sigma_{GPS}\\
+\end{bmatrix}
+       \end{align}
+    </p>
+    
+
+
+At time 0, suppose the car starts at the rightmost race track location (2,0) with known velocity and acceleration, and the hidden state covariance is a relatively large value due to uncertainty. 
+
+    <p>
+    \begin{align}
+X_0 = \begin{bmatrix}2 & 0& 2&  0&  3& 0\end{bmatrix}^T \\
+
+\Sigma_0 = 0.5 I_{6\times 6}
+       \end{align}
+    </p>
+    
+    
+The Kalman Filter algorithm updates the car's predicted position as each observation comes in, which effectiveliy reduces noises and smoothes the raw GPS observations.
+
+ <img src="/img/simulate_kf.jpg" width="350" >
+    
+    
+## Power Market Electricity Price Data 
 
