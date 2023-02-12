@@ -98,13 +98,14 @@ A_t = \begin{bmatrix}
 
 
 The process error matrix covariance $$Q$$ is 
-    <p>
-    \begin{align}
+
+<p>
+\begin{align}
 Q&amp;=Var(\begin{bmatrix}\frac{\delta t^3}{6}a_x & \frac{\delta t^2}{2} a_x & \delta t \cdot a_x & \frac{\delta t^3}{6}a_y & \frac{\delta t^2}{2} a_y & \delta t \cdot a_y\end{bmatrix}^T)\\
  
  &amp;= \sigma_x^2 uu^T + \sigma_y^2 vv^T 
-       \end{align}
-    </p>
+\end{align}
+</p>
 
 
 where $$u = \begin{bmatrix}\frac{\delta t^3}{6}a_x & \frac{\delta t^2}{2} a_x &\delta t \cdot a_x &0&0&0\end{bmatrix}^T, v = \begin{bmatrix}0&0&0& \frac{\delta t^3}{6}a_y & \frac{\delta t^2}{2} a_y &\delta t \cdot a_y\end{bmatrix}^T$$
@@ -112,42 +113,43 @@ where $$u = \begin{bmatrix}\frac{\delta t^3}{6}a_x & \frac{\delta t^2}{2} a_x &\
 
 The GPS observes hidden states directly, so
 
-    <p>
-    \begin{align}
+<p>
+ \[
 H = \begin{bmatrix}
 1&0&0&0&0&0\\
 0&0&0&1&0&0\\
 \end{bmatrix}
-       \end{align}
-    </p>
+\]
+</p>
     
 and the measurement error covariance matrix $$R$$ is 
 
-    <p>
-    \begin{align}
+<p>
+ \[
     H = \begin{bmatrix}
 \sigma_{GPS}&0\\
 0&\sigma_{GPS}\\
 \end{bmatrix}
-       \end{align}
-    </p>
+\]
+</p>
     
 
 
 At time 0, suppose the car starts at the rightmost race track location (2,0) with known velocity and acceleration, and the hidden state covariance is a relatively large value due to uncertainty. 
 
-    <p>
-    \begin{align}
-X_0 = \begin{bmatrix}2 & 0& 2&  0&  3& 0\end{bmatrix}^T \\
 
-\Sigma_0 = 0.5 I_{6\times 6}
-       \end{align}
-    </p>
+<p>
+\begin{align}
+X_0 &amp;= \begin{bmatrix}2 & 0& 2&  0&  3& 0\end{bmatrix}^T \\
+
+\Sigma_0 &amp;= 0.5 I_{6\times 6}
+\end{align}
+</p>
     
     
 The Kalman Filter algorithm updates the car's predicted position as each observation comes in, which effectiveliy reduces noises and smoothes the raw GPS observations.
 
- <img src="/img/simulate_kf.png" width="400" >
+ <img src="/img/simulate_kf.png" width="600" >
     
     
 ## Power Market Electricity Price Data 
