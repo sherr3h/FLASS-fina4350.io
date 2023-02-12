@@ -9,7 +9,7 @@ comments: true
 
 Kalman filter is a Bayesian method to update and improve parameter estimates from observations with uncertainty. It can be applied to time series formulated as a Linear Gaussian State Space Model. The kalman filter method was used by NASA in the Apollo Project to estimate trajectories of the manned spacecraft landing on the Moon and back (wow!). 
 
-In this and the next post, I will apply Kalman filter to two time series datasets: (1) simulated GPS locations (in honour of the Apollo 11 Lunar Module), and (2) a power market electricity price dataset.
+In this and the [next post](https://sherr3h.github.io/2023-02-12-Kalman-Filter-on-Electricity-Prices-and-GPS-Data-2/), I will apply Kalman filter to two time series datasets: (1) simulated GPS locations (in honour of the Apollo 11 Lunar Module), and (2) a power market electricity price dataset.
 
 ## Problem Formulation
 
@@ -127,8 +127,8 @@ and the measurement error covariance matrix $$R$$ is
 <p>
  \[
     R = \begin{bmatrix}
-\sigma_{GPS}&0\\
-0&\sigma_{GPS}\\
+\sigma_{GPS}^2&0\\
+0&\sigma_{GPS}^2\\
 \end{bmatrix}
 \]
 </p>
@@ -146,8 +146,7 @@ X_0 &amp;= \begin{bmatrix}2 & 0& 2&  0&  3& 0\end{bmatrix}^T \\
 \end{align}
 </p>
     
-    
-The Kalman Filter algorithm updates the car's predicted position as each observation comes in, which effectiveliy reduces noises and smoothes the raw GPS observations.
+Here're the results. The Kalman Filter algorithm updates the car's predicted position as each observation comes in, which effectiveliy reduces noises and smoothes the raw GPS observations.
 
  <img src="/img/simulate_kf.png" width="600" >
 
