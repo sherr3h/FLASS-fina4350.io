@@ -60,30 +60,32 @@ Suppose unfortunately the car jerks when accelerating (such that the acceleratio
 
 
 By the Newton's law of motion,
-    <p>
-    \begin{align}
-x(t+ \delta t) &amp;=x(t) + \delta t \cdot \dot{x}(t) + \frac{\delta t^2}{2} \ddot{x}(t)+ \frac{\delta t^3}{6} a_x
 
- \dot{x}(t+ \delta t) &amp;= \dot{x}(t) + \delta t \cdot \ddot{x}(t) +  \frac{\delta t^2}{2} a_x
+<p>
+\begin{align}
+x(t+ \delta t) &amp;=x(t) + \delta t \cdot \dot{x}(t) + \frac{\delta t^2}{2} \ddot{x}(t)+ \frac{\delta t^3}{6} a_x \\
+
+ \dot{x}(t+ \delta t) &amp;= \dot{x}(t) + \delta t \cdot \ddot{x}(t) +  \frac{\delta t^2}{2} a_x \\
 
 \ddot{x}(t+ \delta t) &amp;=  \ddot{x}(t) + \delta t \cdot a_x
-       \end{align}
-    </p>
-The dynamics are similar for dimension $y$.
+\end{align}
+</p>
+
+The dynamics are similar for dimension $$y$$.
 
 Let the car carry a GPS device to observe its current physical position, with measurement error following $$\epsilon \sim N\left(0, \sigma_{GPS}^2 \right)$$ on both dimensions. The observations might look like this:
 
- <img src="/img/simulate_gps.jpg" width="350" >
+ <img src="/img/simulate_gps.png" width="400" >
 
 Applying Newton dynamics to Kalman Filter, the state and observation vectors contain up to second order derivatives of the position (note $$x,y$$ are position on the 2D plane, and $$X, Y$$ are the hidden state and observation of the car's GPS position):
 
-    <p>
-    \begin{align}
+<p>
+\begin{align}
 X &amp;= \begin{bmatrix}x & \dot{x} & \ddot{x} & y & \dot{y} & \ddot{y}\end{bmatrix}^T \\
-Y &amp;= \begin{bmatrix}x_{obs} & y_{obs}\end{bmatrix}^T \\
-
-
-A_t &amp;= \begin{bmatrix}
+Y &amp;= \begin{bmatrix}x_{obs} & y_{obs}\end{bmatrix}^T 
+\end{align}
+ \[
+A_t = \begin{bmatrix}
     1& \delta t& \frac{\delta t^2}{2}& 0& 0& 0\\
     0& 1& dt& 0& 0& 0\\
     0& 0& 1& 0& 0& 0\\
@@ -91,8 +93,8 @@ A_t &amp;= \begin{bmatrix}
     0& 0& 0& 0& 1& \delta t\\
     0& 0& 0& 0& 0& 1\\
 \end{bmatrix}
-       \end{align}
-    </p>
+ \]
+</p>
 
 
 The process error matrix covariance $$Q$$ is 
@@ -145,7 +147,7 @@ X_0 = \begin{bmatrix}2 & 0& 2&  0&  3& 0\end{bmatrix}^T \\
     
 The Kalman Filter algorithm updates the car's predicted position as each observation comes in, which effectiveliy reduces noises and smoothes the raw GPS observations.
 
- <img src="/img/simulate_kf.jpg" width="350" >
+ <img src="/img/simulate_kf.png" width="400" >
     
     
 ## Power Market Electricity Price Data 
