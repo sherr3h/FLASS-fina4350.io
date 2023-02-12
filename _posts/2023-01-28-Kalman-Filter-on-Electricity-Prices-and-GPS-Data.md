@@ -23,12 +23,14 @@ $$X_{t+1} = A_t X_t + \eta_t, \eta_t \sim N(0, Q_t)$$
 
 where \\(R_t\\) is the measurement error covariance matrix and \\(Q_t\\) is the process error covariance matrix.
 
-Using conclusions from the marginal and conditional distributions of multivariate Gaussians, and let \\(X_{t+1|t}\\) be the predicted latent state with predicted mean \\(\mu_{t+1|t}\\) and predicted covariance \\(\Sigma_{t+1|t}\\), the Kalman filter algorithm:
+Using conclusions from the marginal and conditional distributions of multivariate Gaussians, and let $$X_{t+1\lvert t}$$ be the predicted latent state with predicted mean \\(\mu_{t+1\lvert t}\\) and predicted covariance \\(\Sigma_{t+1\lvert t}\\), the Kalman filter algorithm:
 
-- At time 0, initial guess is \\(X_0 \sim (\mu_{0|0}, \Sigma_{0|0}) \\)
+- At time 0, initial guess is \\(X_0 \sim (\mu_{0\lvert 0}, \Sigma_{0\lvert 0}) \\)
 - At time t, 
     - prediction updates:
+    <p>
     $$\mu_{t+1|t} = A_t \mu_{t|t}$$
+    </p>
     $$\Sigma_{t+1|t} = A_t \Sigma_{t|t}A_t ^T + Q_t$$
     - Measurement updates:
       $$K_{t+1} = \Sigma_{t+1|t}H_{t+1}^T \left(H_{t+1} \Sigma_{t+1|t}H_{t+1}^T + R_{t+1}  \right)^{-1}, \text{the Kalman gain}$$
