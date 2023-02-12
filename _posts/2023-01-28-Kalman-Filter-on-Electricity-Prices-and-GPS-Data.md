@@ -58,11 +58,11 @@ $$x=2\cos(t), y=\sin(3t), t\ge 0$$
 
 Suppose unfortunately the car jerks when accelerating (such that the acceleration is not constant), we consider the third order derivatives of the car's position as Gaussian variables. The state and observation vectors contain up to second order derivatives of the position (note $$x,y$$ are position on the 2D plane, and $$X, Y$$ are the hidden state and observation of the car's GPS position):
 
-    <p>
-    \begin{align}
-    X &amp;= (x \; \dot{x} \; \ddot{x} \; y \; \dot{y} \; \ddot{y})^T \\
-    Y &amp;= (x_{obs} \; y_{obs})^T
-       \end{align}
-    </p>
+<p>
+\begin{align}
+X &amp;= (x \; \dot{x} \; \ddot{x} \; y \; \dot{y} \; \ddot{y})^T \\
+Y &amp;= (x_{obs} \; y_{obs})^T
+\end{align}
+</p>
 
 
