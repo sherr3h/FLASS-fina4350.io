@@ -13,7 +13,7 @@ In this post, I will apply Kalman filter to two time series datasets: (1) simula
 
 ## Problem Formulation
 
-Assumption: all noises are Gaussian, in which case the Kalman filter minimises the mean square error of estimated parameters. If the noises are not Gaussian, given only the mean and standard deviation, the (extended) Kalman filter is the best linear estimator.
+Assumption: all noises are Gaussian, in which case the Kalman filter minimises the mean square error of estimated parameters. If the noises are not Gaussian, given only the mean and standard deviation, the Kalman filter is the best linear estimator.
  
 The State Space Model, with observations  \\(Y_t \\) and hidden states \\(X_t\\):
 
@@ -56,8 +56,13 @@ $$x=2\cos(t), y=\sin(3t), t\ge 0$$
 
  <img src="/img/simulate_motion.jpg" width="700" >
 
-Suppose unfortunately the car jerks when accelerating (such that the acceleration is not constant) and we have to consider up to the third order derivatives of the motion. The state and observation vectors are (note $$x,y$$ are position on the 2D plane, and $$X, Y$$ are the hidden state and observation of the car's GPS position):
+Suppose unfortunately the car jerks when accelerating (such that the acceleration is not constant), we consider the third order derivatives of the car's position as Gaussian variables. The state and observation vectors contain up to second order derivatives of the position (note $$x,y$$ are position on the 2D plane, and $$X, Y$$ are the hidden state and observation of the car's GPS position):
 
-
+    <p>
+    \begin{align}
+    X &amp;= (x \; \dot{x} \; \ddot{x} \; y \; \dot{y} \; \ddot{y})^T \\
+    Y &amp;= (x_{obs} \; y_{obs})^T
+       \end{align}
+    </p>
 
 
