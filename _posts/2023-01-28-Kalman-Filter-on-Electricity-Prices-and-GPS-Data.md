@@ -13,8 +13,7 @@ In this post, I will apply Kalman filter to two time series datasets: (1) simula
 
 ## Problem Formulation
 
-Assumption: all noises are Gaussian, in which case the Kalman filter minimises the mean square error of estimated parameters. If the noises are not Gaussian, given only the mean and standard deviation, the Kalman filter is the
-best linear estimator.
+Assumption: all noises are Gaussian, in which case the Kalman filter minimises the mean square error of estimated parameters. If the noises are not Gaussian, given only the mean and standard deviation, the (extended) Kalman filter is the best linear estimator.
  
 The State Space Model, with observations  \\(Y_t \\) and hidden states \\(X_t\\):
 
@@ -34,16 +33,20 @@ Using conclusions from the marginal and conditional distributions of multivariat
     - prediction updates:
     <p>
     \begin{align}
-    \mu_{t+1|t} &amp; = A_t \mu_{t|t}
-    \Sigma_{t+1|t} &amp; = A_t \Sigma_{t|t}A_t ^T + Q_t
+    \mu_{t+1|t} &amp; = A_t \mu_{t|t} \\ 
+    \Sigma_{t+1|t} &amp; = A_t \Sigma_{t|t}A_t ^T + Q_t 
     \end{align}
     </p>
     
     - Measurement updates:
-      $$K_{t+1} = \Sigma_{t+1|t}H_{t+1}^T \left(H_{t+1} \Sigma_{t+1|t}H_{t+1}^T + R_{t+1}  \right)^{-1}, \text{the Kalman gain}$$
-      $$\mu_{t+1|t+1} = \mu_{t+1|t} + K_{t+1} \left(y_{t+1} - H_{t+1}\mu_{t+1|t} \right) =\left(I -  K_{t+1}H_{t+1}\right)\mu_{t+1|t} + K_{t+1} y_{t+1}, \text{Innovation}$$
-      $$\Sigma_{t+1|t+1} = \left(I -  K_{t+1}H_{t+1}\right) \Sigma_{t+1|t}$$
-   
+    <p>
+    \begin{align}
+      K_{t+1} &amp;= \Sigma_{t+1|t}H_{t+1}^T \left(H_{t+1} \Sigma_{t+1|t}H_{t+1}^T + R_{t+1}  \right)^{-1}, \text{the Kalman gain} \\
+      \mu_{t+1|t+1} &amp;= \mu_{t+1|t} + K_{t+1} \left(y_{t+1} - H_{t+1}\mu_{t+1|t} \right)  \\
+                    &amp; =\left(I -  K_{t+1}H_{t+1}\right)\mu_{t+1|t} + K_{t+1} y_{t+1}, \text{Innovation} \\
+      \Sigma_{t+1|t+1} &amp; = \left(I -  K_{t+1}H_{t+1}\right) \Sigma_{t+1|t} 
+       \end{align}
+    </p>
    
 ### Simulated Race Car Location Data 
 
@@ -52,6 +55,9 @@ Suppose a race car is on a track with the following equations:
 $$x=2\cos(t), y=\sin(3t), t\ge 0$$
 
  <img src="/img/simulate_motion.jpg" width="700" >
+
+Suppose unfortunately the car jerks when accelerating (such that the acceleration is not constant) and we have to consider up to the third order derivatives of the motion. The state and observation vectors are (note $$x,y$$ are position on the 2D plane), and $$X, Y$$ are the hidden state and observation of the car's GPS position):
+
 
 
 
