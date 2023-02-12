@@ -30,7 +30,7 @@ Using conclusions from the marginal and conditional distributions of multivariat
 
 - At time 0, initial guess is \\(X_0 \sim (\mu_{0\lvert 0}, \Sigma_{0\lvert 0}) \\)
 - At time t, 
-    - prediction updates:
+    - Prediction updates:
     <p>
     \begin{align}
     \mu_{t+1|t} &amp; = A_t \mu_{t|t} \\ 
@@ -41,9 +41,9 @@ Using conclusions from the marginal and conditional distributions of multivariat
     - Measurement updates:
     <p>
     \begin{align}
-      K_{t+1} &amp;= \Sigma_{t+1|t}H_{t+1}^T \left(H_{t+1} \Sigma_{t+1|t}H_{t+1}^T + R_{t+1}  \right)^{-1}, \text{the Kalman gain} \\
+      K_{t+1} &amp;= \Sigma_{t+1|t}H_{t+1}^T \left(H_{t+1} \Sigma_{t+1|t}H_{t+1}^T + R_{t+1}  \right)^{-1}, \text{ the Kalman gain} \\
       \mu_{t+1|t+1} &amp;= \mu_{t+1|t} + K_{t+1} \left(y_{t+1} - H_{t+1}\mu_{t+1|t} \right)  \\
-                    &amp; =\left(I -  K_{t+1}H_{t+1}\right)\mu_{t+1|t} + K_{t+1} y_{t+1}, \text{Innovation} \\
+                    &amp; =\left(I -  K_{t+1}H_{t+1}\right)\mu_{t+1|t} + K_{t+1} y_{t+1}, \text{ the Innovation} \\
       \Sigma_{t+1|t+1} &amp; = \left(I -  K_{t+1}H_{t+1}\right) \Sigma_{t+1|t} 
        \end{align}
     </p>
@@ -56,7 +56,7 @@ $$x=2\cos(t), y=\sin(3t), t\ge 0$$
 
  <img src="/img/simulate_motion.jpg" width="700" >
 
-Suppose unfortunately the car jerks when accelerating (such that the acceleration is not constant) and we have to consider up to the third order derivatives of the motion. The state and observation vectors are (note $$x,y$$ are position on the 2D plane), and $$X, Y$$ are the hidden state and observation of the car's GPS position):
+Suppose unfortunately the car jerks when accelerating (such that the acceleration is not constant) and we have to consider up to the third order derivatives of the motion. The state and observation vectors are (note $$x,y$$ are position on the 2D plane, and $$X, Y$$ are the hidden state and observation of the car's GPS position):
 
 
 
