@@ -7,4 +7,4 @@ comments: true
 ---
 
 
-The problem formulation of Kalman Filter in the [previous post] (https://sherr3h.github.io/2023-01-28-Kalman-Filter-on-Electricity-Prices-and-GPS-Data/).
+The problem formulation of Kalman Filter in the [previous post](https://sherr3h.github.io/2023-01-28-Kalman-Filter-on-Electricity-Prices-and-GPS-Data/).
