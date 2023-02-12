@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Kalman Filter on Electricity Prices and GPS Data.md
+title: Kalman Filter on Electricity Prices and GPS Data
 gh-repo: sherr3h/sherr3h.github.io
 tags: [Kalman Filter, Statistics, Time Series]
 comments: true
@@ -16,7 +16,7 @@ In this post, I will apply Kalman filter to two time series datasets: (1) simula
 Assumption: all noises are Gaussian, in which case the Kalman filter minimises the mean square error of estimated parameters. If the noises are not Gaussian, given only the mean and standard deviation, the Kalman filter is the
 best linear estimator.
  
-The State Space Model, with observations $Y_t$ and hidden states $X_t$:
+The State Space Model, with observations  \\(Y_t \\) and hidden states $X_t$:
 
 $$Y_t = H_t X_t + \epsilon_t, \epsilon_t \sim N(0, R_t)$$
 $$X_{t+1} = A_t X_t + \eta_t, \eta_t \sim N(0, Q_t)$$
@@ -25,7 +25,7 @@ where $R_t$ is the measurement error covariance matrix and $Q_t$ is the process 
 
 Using conclusions from the marginal and conditional distributions of multivariate Gaussians, and let $X_{t+1|t}$ be the predicted latent state with predicted mean $\mu_{t+1|t}$ and predicted covariance $\Sigma_{t+1|t}$, the Kalman filter algorithm:
 
-- At time 0, initial guess is $X_0 \sim (\mu_{0|0}, \Sigma_{0|0})$
+- At time 0, initial guess is \\(X_0 \sim (\mu_{0|0}, \Sigma_{0|0}) \\)$
 - At time t, 
     - prediction updates:
     $$\mu_{t+1|t} = A_t \mu_{t|t}$$
