@@ -1,6 +1,6 @@
 ---
 layout: post
-  title: Kalman Filter on Power Market Electricity Price Data
+title: Kalman Filter on Power Market Electricity Price Data
 gh-repo: sherr3h/sherr3h.github.io
 tags: [Kalman Filter, Financial Data, Time Series]
 comments: true
