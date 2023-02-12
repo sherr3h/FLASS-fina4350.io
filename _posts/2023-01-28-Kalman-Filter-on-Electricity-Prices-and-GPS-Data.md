@@ -18,8 +18,12 @@ best linear estimator.
  
 The State Space Model, with observations  \\(Y_t \\) and hidden states \\(X_t\\):
 
-$$Y_t = H_t X_t + \epsilon_t, \epsilon_t \sim N(0, R_t)$$
-$$X_{t+1} = A_t X_t + \eta_t, \eta_t \sim N(0, Q_t)$$
+<p>
+\begin{align}
+ Y_t &amp;= H_t X_t + \epsilon_t, \epsilon_t \sim N(0, R_t) \\
+ X_{t+1} &amp;= A_t X_t + \eta_t, \eta_t \sim N(0, Q_t)
+ \end{align}
+ </p>
 
 where \\(R_t\\) is the measurement error covariance matrix and \\(Q_t\\) is the process error covariance matrix.
 
@@ -29,9 +33,12 @@ Using conclusions from the marginal and conditional distributions of multivariat
 - At time t, 
     - prediction updates:
     <p>
-    $$\mu_{t+1|t} = A_t \mu_{t|t}$$
+    \begin{align}
+    \mu_{t+1|t} &amp; = A_t \mu_{t|t}
+    \Sigma_{t+1|t} &amp; = A_t \Sigma_{t|t}A_t ^T + Q_t
+    \end{align}
     </p>
-    $$\Sigma_{t+1|t} = A_t \Sigma_{t|t}A_t ^T + Q_t$$
+    
     - Measurement updates:
       $$K_{t+1} = \Sigma_{t+1|t}H_{t+1}^T \left(H_{t+1} \Sigma_{t+1|t}H_{t+1}^T + R_{t+1}  \right)^{-1}, \text{the Kalman gain}$$
       $$\mu_{t+1|t+1} = \mu_{t+1|t} + K_{t+1} \left(y_{t+1} - H_{t+1}\mu_{t+1|t} \right) =\left(I -  K_{t+1}H_{t+1}\right)\mu_{t+1|t} + K_{t+1} y_{t+1}, \text{Innovation}$$
@@ -40,7 +47,7 @@ Using conclusions from the marginal and conditional distributions of multivariat
    
 ### Simulated Race Car Location Data 
 
-Suppose a race car is on the track with following equations:
+Suppose a race car is on a track with the following equations:
 
 $$x=2\cos(t), y=\sin(3t), t\ge 0$$
 
