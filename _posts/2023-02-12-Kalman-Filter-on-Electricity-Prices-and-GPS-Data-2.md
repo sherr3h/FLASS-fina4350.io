@@ -41,19 +41,19 @@ Initial guesses also matter, but not as much as the covariances, since the Bayes
 
 We can try monetizing the relative value between France's and Belgium's electricity prices with a mean-reverting strategy. Denote 
 $$\hat{Y}_t = H_t X_t$$ 
-as the predicted Belgium electricity price, $$Y_{err} = Y_t - \hat{Y}_t$$, we try to find a interval of $$Y_{err}$$ values for entry signal $$[p_1,p_2]$$, an exit level $$p_{\text{exit}}$$, and a stop loss level $$p_{\text{stoploss}}$$, with $$p_{\text{exit}} \le p_1 \le p_2 \le p_{\text{stoploss}}$$. With a long or short signal, the position is $$\text{sign}\cdot \left (\text{EPEX-FR}_t - \beta_t \cdot \text{EPEX-BE}_t \right)$$. For this project, I didn't focus on the strategy, but created an interactive Python tool to back-test different price levels. The graph below shows a strategy with Sharpe ratio of 0.58.
+as the predicted Belgium electricity price, $$Y_{err} = Y_t - \hat{Y}_t$$, the goal is to find an interval of $$Y_{err}$$ values for entry signal $$[p_1,p_2]$$, an exit level $$p_{\text{exit}}$$, and a stop loss level $$p_{\text{stoploss}}$$, with $$p_{\text{exit}} \le p_1 \le p_2 \le p_{\text{stoploss}}$$. With a long or short signal, the position is $$\text{sign}\cdot \left (\text{EPEX-FR}_t - \beta_t \cdot \text{EPEX-BE}_t \right)$$. For this project, I didn't focus on the strategy, but created an interactive Python tool to back-test different price levels. The graph below shows a strategy with Sharpe ratio of 0.58.
 
 <img src="/img/EPEX_BE_FR_relativeval.png" width="800" >
 
 ### Task 2: Use France's Day-Ahead Generation Forecast to Predict France's and Belgium's Day-Ahead Electricity Price
 
-Task 1 does not consider any exogenous variables besides the price data. This task tries to include more information to the Kalman Filter.
+Task 1 does not consider any exogenous variables besides the price data. This task tries to incorporate more information to the Kalman Filter.
 
 **Features**: 
 
 The paper [1] suggests the day-ahead grid load forecast and day-ahead generation forecast in France are the best predictors for both France's and Belgium's day-ahead electricity from current literature. This is possibly because of the increasing level of European electricity market integration and the two countries' capacity. According to the 2016 IEA Energy Policies Review of France and Belgium [2][3], France had an estimated total suppy of 91.8 TWh renewable energy while Belgium had a total supply of 13.5 TWh. The feature selection process is worth revisting but I will use these variables for now. 
 
-The two features, day-ahead grid load forecast and day-ahead generation forecast in France, are available at the website of [RTE](https://www.services-rte.com/en/view-data-published-by-rte.html), France's Transmission System Operator. They exhibit cyclical patterns on levels of years, weeks, and days. The two features also have a high correlation of 0.908 over the period 2011-2016.
+The two features, day-ahead grid load forecast and day-ahead generation forecast in France, are available at the website of [RTE](https://www.services-rte.com/en/view-data-published-by-rte.html), France's Transmission System Operator. They exhibit cyclical patterns on levels of years, weeks, and days. The two features also have a high correlation of 0.908 over the period 2011-2016. 
 
 <img src="/img/LoadGeneration_2011_16.png" width="720" >
 
