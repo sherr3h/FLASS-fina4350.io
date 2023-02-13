@@ -12,23 +12,9 @@ The problem formulation of Kalman Filter is in the [previous post](https://sherr
 
 ### Power Market Electricity Price Dataset
 
-I found the dataset from [this paper](https://doi.org/10.1016/j.apenergy.2021.116983) [1]. It contains hourly electricity prices in the EPEX-BE and EPEX-FR market, the day-ahead electricity market in Belgium and France, from 09 Jan, 2011 to 31 Dec, 2016. 
-
-**Features**: The paper suggests the day-ahead grid load forecast and day-ahead generation forecast in France are the best predictors for both France's and Belgium's day-ahead electricity from current literature. This is possibly because of the increasing level of European electricity market integration and the two countries' capacity. According to the 2016 IEA Energy Policies Review of France and Belgium [2][3], France had an estimated total suppy of 91.8 TWh renewable energy while Belgium had a total supply of 13.5 TWh. The feature selection process is worth revisting but I will use these variables for now. 
-
-The electricity price data contains 52416 rows with negative and zero prices as well as price spikes. Removing outliers when the electricity price is over 350 Euros per MWh or below 0, there're 52367 ovservations. (I tried to keep these entries, but the Kalman Filter parameter estimates are "twisted" by these data points for a nontrivial period.) The prices in the two markets have a positive correlation of 0.859, which suggests there might be relative value trading opportunities.
+I found the dataset from [this paper](https://doi.org/10.1016/j.apenergy.2021.116983) [1]. It contains hourly electricity prices in the EPEX-BE and EPEX-FR market, the day-ahead electricity market in Belgium and France, from 09 Jan, 2011 to 31 Dec, 2016. The price dataset contains 52416 rows with negative and zero prices as well as price spikes. Removing outliers when the electricity price is over 350 Euros per MWh or below 0, there're 52367 ovservations. (I tried keeping these entries, but the Kalman Filter parameter estimates are "twisted" by these data points for a nontrivial period.) Prices in the two markets have a positive correlation of 0.859, which suggests there might be relative value trading opportunities.
 
 <img src="/img/EPEX_BE_FR.png" width="720" >
-
-The two features, the day-ahead grid load forecast and day-ahead generation forecast in France, are available at the website of [RTE](https://www.services-rte.com/en/view-data-published-by-rte.html), France's Transmission System Operator. They exhibit cyclical patterns on levels of years, weeks, and days. The two features also have a high correlation of 0.908 over the period 2011-2016.
-
-<img src="/img/LoadGeneration_2011_16.png" width="720" >
-
-<img src="/img/LoadGeneration_2011.png" width="720" >
-
-<img src="/img/LoadGeneration_2011Jan.png" width="720" >
-
-
 
 ### Task 1: Mean-reverting Trading between France's and Belgium's Electricity Price
 
@@ -46,18 +32,34 @@ The hidden factors evolve in this way:
 <p> \begin{align} X_{t+1} &amp; = [\alpha_{t+1} \beta_{t+1}]^T  \\
    &amp; = X_t + \eta_t, \eta_t \sim N(0, Q_t)   \end{align}</p>
    
-   
-The initial guesses, especially the ratio of the Gaussian variances and correlations, matter a lot. This will be discussed in a later section. Given an intial guess, the Kalman Filter algorithm updates the estimated $$\alpha_t, \beta_t$$ as each observation comes in. The Mean Absolute Error of the Kalman Filter predictions is 1.566, while a baseline MAE of using today's electricity price as next-day predicted price is 4.197.
+The choice of measurement error covariance $$R_t$$ and process error covariance $$Q_t$$, especially the ratio of values, matter a lot. For data gathered from physical observations, using a motion sensor or a stopwatch, we can use the precision of instrument. For financial data, we can only estimate infer correlations and covariances from historical data or dynamics from domain knowledge. With some trial and error, I found a suitable covariance $$Q_t = Q$$ that is independent of time (which might not be optimal).
 
+Given an initial guess, the Kalman Filter algorithm updates the estimated $$\alpha_t \beta_t$$ as each observation comes  in. In the graph below, the Mean Absolute Error of the Kalman Filter predictions is 1.566, while a baseline MAE of using today's electricity price as next-day predicted price is 4.197.
 
 <img src="/img/EPEX_BE_FR_alphabeta.png" width="800" >
 
-We can try monetizing the relative value between France's and Belgium's electricity prices with a mean-reverting strategy. 
+
+We can try monetizing the relative value between France's and Belgium's electricity prices with a mean-reverting strategy. Denote 
+$$\hat{Y}_t = H_t X_t$$ 
+as the predicted Belgium electricity price, $$Y_{err} = Y_t - \hat{Y}_t$$, we try to find a interval of $$Y_{err}$$ values for entry signal $$[p_1,p_2]$$, an exit level $$p_{\text{exit}}$$, and a stop loss level $$p_{\text{stoploss}}$$, with $$p_{\text{exit}} \le p_1 \le p_2 \le p_{\text{stoploss}}$$. With a long or short signal, the position is $$\text{sign}\cdot \left (\text{EPEX-FR}_t - \beta_t \cdot \text{EPEX-BE}_t \right)$$. For this project, I didn't focus on the strategy, but created an interactive Python tool to back-test different price levels. The graph below shows a strategy with Sharpe ratio of 0.58.
 
 <img src="/img/EPEX_BE_FR_relativeval.png" width="800" >
 
-
 ### Task 2: Use France's Day-Ahead Generation Forecast to Predict France's and Belgium's Day-Ahead Electricity Price
+
+**Features**: The paper [1] suggests the day-ahead grid load forecast and day-ahead generation forecast in France are the best predictors for both France's and Belgium's day-ahead electricity from current literature. This is possibly because of the increasing level of European electricity market integration and the two countries' capacity. According to the 2016 IEA Energy Policies Review of France and Belgium [2][3], France had an estimated total suppy of 91.8 TWh renewable energy while Belgium had a total supply of 13.5 TWh. The feature selection process is worth revisting but I will use these variables for now. 
+
+The two features, the day-ahead grid load forecast and day-ahead generation forecast in France, are available at the website of [RTE](https://www.services-rte.com/en/view-data-published-by-rte.html), France's Transmission System Operator. They exhibit cyclical patterns on levels of years, weeks, and days. The two features also have a high correlation of 0.908 over the period 2011-2016.
+
+<img src="/img/LoadGeneration_2011_16.png" width="720" >
+
+<img src="/img/LoadGeneration_2011.png" width="720" >
+
+<img src="/img/LoadGeneration_2011Jan.png" width="720" >
+
+
+
+
 
 
 
