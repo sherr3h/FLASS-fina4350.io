@@ -16,7 +16,7 @@ I found the dataset from [this paper](https://doi.org/10.1016/j.apenergy.2021.11
 
 **Features**: The paper suggests the day-ahead grid load forecast and day-ahead generation forecast in France are the best predictors for both France's and Belgium's day-ahead electricity from current literature. This is possibly because of the increasing level of European electricity market integration and the two countries' capacity. According to the 2016 IEA Energy Policies Review of France and Belgium [2][3], France had an estimated total suppy of 91.8 TWh renewable energy while Belgium had a total supply of 13.5 TWh. The feature selection process is worth revisting but I will use these variables for now. 
 
-The electricity price data contains 52416 rows with negative and zero prices as well as price spikes. Removing outliers when the electricity price is over 500 Euros per MWh or below 0, there're 52367 ovservations. (I tried to keep these entries, but the Kalman Filter parameter estimates are "twisted" by these data points for a nontrivial period.) The prices in the two markets have a positive correlation of 0.831, which suggests there might be relative value trading opportunities.
+The electricity price data contains 52416 rows with negative and zero prices as well as price spikes. Removing outliers when the electricity price is over 350 Euros per MWh or below 0, there're 52367 ovservations. (I tried to keep these entries, but the Kalman Filter parameter estimates are "twisted" by these data points for a nontrivial period.) The prices in the two markets have a positive correlation of 0.859, which suggests there might be relative value trading opportunities.
 
 <img src="/img/EPEX_BE_FR.png" width="720" >
 
@@ -46,6 +46,16 @@ The hidden factors evolve in this way:
 <p> \begin{align} X_{t+1} &amp; = [\alpha_{t+1} \beta_{t+1}]^T  \\
    &amp; = X_t + \eta_t, \eta_t \sim N(0, Q_t)   \end{align}</p>
    
+   
+The initial guesses, especially the ratio of the Gaussian variances and correlations, matter a lot. This will be discussed in a later section. Given an intial guess, the Kalman Filter algorithm updates the estimated $$\alpha_t, \beta_t$$ as each observation comes in. The Mean Absolute Error of the Kalman Filter predictions is 1.566, while a baseline MAE of using today's electricity price as next-day predicted price is 4.197.
+
+
+<img src="/img/EPEX_BE_FR_alphabeta.png" width="800" >
+
+We can try monetizing the relative value between France's and Belgium's electricity prices with a mean-reverting strategy. 
+
+<img src="/img/EPEX_BE_FR_relativeval.png" width="800" >
+
 
 ### Task 2: Use France's Day-Ahead Generation Forecast to Predict France's and Belgium's Day-Ahead Electricity Price
 
