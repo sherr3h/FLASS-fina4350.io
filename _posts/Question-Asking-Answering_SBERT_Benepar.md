@@ -6,5 +6,5 @@ tags: [Natural Language Processing, Transformer]
 comments: true
 ---
 
-This post is extended from a Natural Language Processing course project I did with two teammates. We got the 2nd highest grade in the course and I was asked by the instructor to be a teaching assistant for the course (but I graduated that semester).
+This post is extended from a Natural Language Processing course project I did with two teammates. We got the 2nd highest grade, and I was asked by the instructor to be a teaching assistant for the course (but I graduated that semester).
 
