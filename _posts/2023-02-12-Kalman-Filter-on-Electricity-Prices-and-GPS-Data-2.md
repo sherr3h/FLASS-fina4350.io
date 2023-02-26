@@ -31,18 +31,17 @@ Y_t= \text{EPEX-BE}_t &amp; = \alpha_t + \beta_t \cdot \text{EPEX-FR}_t+\epsilon
 
 The hidden factors evolve in this way:
 
-<p> \begin{align} X_{t+1} &amp; = [\alpha_{t+1} \beta_{t+1}]^T  \\
+<p> \begin{align} X_{t+1} &amp; = \begin{bmatrix} \alpha_{t+1} & \beta_{t+1}]\end{bmatrix}^T  \\
    &amp; = X_t + \eta_t, \eta_t \sim N(0, Q_t)   \end{align}</p>
    
    
-#### Signal
+#### Signal & Monetization
 The choice of measurement error covariance $$R_t$$ and process error covariance $$Q_t$$, especially the ratio of values, matter a lot. Had we gathered data from physical observations, say with a motion sensor or a stopwatch, we can use the precision of instrument. For financial data, we can only estimate infer correlations and covariances from historical data or dynamics from domain knowledge. With some trial and error, I found a suitable covariance $$Q_t = Q$$ independent of time (which can be revisted too).
 
 Initial guesses also matter, but not as much as the covariances, since the Bayesian algorithm will constantly update the estimates. Given an initial guess, the Kalman Filter algorithm updates the estimated $$\alpha_t \beta_t$$ as each observation comes in. The graph below shows the estimated $$\alpha_t \beta_t$$, with the Mean Absolute Error of the Kalman Filter predictions being 1.566. Meanwhile, a baseline MAE of using today's electricity price as next-day predicted price is 4.197. This suggests France's EPEX electricity price indeed has some predictive powers for Belgium's day-ahead EPEX electricity price.
 
 <img src="/img/EPEX_BE_FR_alphabeta.png" width="800" >
 
-#### Monetization
 We can try monetizing the relative value between France's and Belgium's electricity prices with a mean-reverting strategy. Denote 
 $$\hat{Y}_t = H_t X_t$$ 
 as the predicted Belgium electricity price, $$Y_{err} = Y_t - \hat{Y}_t$$, the goal is to find an interval of $$Y_{err}$$ values for entry signal $$[p_1,p_2]$$, an exit level $$p_{\text{exit}}$$, and a stop loss level $$p_{\text{stoploss}}$$, with $$p_{\text{exit}} \le p_1 \le p_2 \le p_{\text{stoploss}}$$. With a long or short signal, the position is $$\text{sign}\cdot \left (\text{EPEX-FR}_t - \beta_t \cdot \text{EPEX-BE}_t \right)$$. For this project, I didn't focus on the strategy, but created an interactive Python tool to back-test different price levels. The graph below on the left is the signals based on $$Y_{err}$$. The graph below on the right shows a strategy with Sharpe ratio of 0.58.
@@ -67,7 +66,7 @@ The two features, day-ahead grid load forecast and day-ahead generation forecast
 
 The France's day-ahead load and generation forecasts are highly correlated, with a positive correlation of 0.9. If both are added as Kalman Filter states, the inverse of covariance matrices might sometimes be unexpectedly large. The two variables are also of the same physical unit (MW), so I decided to use the difference between them as a new feature, i.e., $$\text{load-gen-diff}_t = \text{load}_t - \text{generation}_t$$. This new variable also makes sense as an excessive supply.
 
-In this task, I decide to incorporate the information of two variables, France's electricitiy price and difference between load and generation forecasts, to predict Belgium's day-ahead electricity price. The problem setup can be revised to as follows: Belgium's electricity price as observations $$Y_t = \text{EPEX-BE}_t$$, France's electricity price and load-generation difference as the observation process $$H_t = \begin{bmatrix}1 & \text{EPEX-FR}_t & \text{load-gen-diff}_t\end{bmatrix}$$  and the relationship between the them being hidden states $$X_t = \begin{bmatrix} \alpha_t & \beta_{1,t} & \beta_{2,t} \end{bmatrix}^T$$.
+In this task, I decided to incorporate the information of two variables, France's electricitiy price and difference between load and generation forecasts, to predict Belgium's day-ahead electricity price. The problem setup can be revised to as follows: Belgium's electricity price as observations $$Y_t = \text{EPEX-BE}_t$$, France's electricity price and load-generation difference as the observation process $$H_t = \begin{bmatrix}1 & \text{EPEX-FR}_t & \text{load-gen-diff}_t\end{bmatrix}$$  and the relationship between the them being hidden states $$X_t = \begin{bmatrix} \alpha_t & \beta_{1,t} & \beta_{2,t} \end{bmatrix}^T$$.
 
 
 
@@ -80,10 +79,14 @@ Y_t= \text{EPEX-BE}_t &amp; = \alpha_t + \beta_{1,t} \cdot \text{EPEX-FR}_t+ \be
 
 The hidden factors evolve in this way:
 
-<p> \begin{align} X_{t+1} &amp; = [\alpha_{t+1} \beta_{1,t+1}  \beta_{2,t+1}]^T  \\
+<p> \begin{align} X_{t+1} &amp; = \begin{bmatrix} \alpha_{t+1} & \beta_{1,t+1} & \beta_{2,t+1}\end{bmatrix}^T  \\
    &amp; = X_t + \eta_t, \eta_t \sim N(0, Q_t)   \end{align}</p>
    
+Since the two features are of very different magnitutes, I used `MinMaxScaler` in `sklearn.preprocessing` to normalize the data by scaling each column linearly. I found normalization achieves better results than standardization via `StandardScaler` and `RobustScaler`. I think `StandardScaler` is not appropriate as there are outliers and the features do not follow normal distributions, whereas `RobustScaler` scales by quartiles and is better than `StandardScaler` and is still not an appropriate non-linear scaling.
    
+#### Signal & Monetization
+
+<img src="/img/EPEX_BE_FR_loadgendiff_relativeval.png" width="800" >
 
 ### References
 
